@@ -1,0 +1,37 @@
+name: Lint
+
+on: ['push']
+
+jobs:
+  pint:
+    runs-on: ubuntu-latest
+
+    name: pint
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v3.3.2
+        id: composer
+        with:
+          path: vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@2.28.0
+        with:
+          php-version: 8.3
+          extensions: json, dom, curl, libxml, mbstring
+          tools: composer:v2
+
+      - name: Install composer dependencies
+        env:
+          COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
+        run: composer install --quiet --no-ansi --no-interaction --no-progress --prefer-dist
+
+      - name: Pint check
+        run: ./vendor/bin/pint --test

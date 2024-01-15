@@ -1,0 +1,77 @@
+{
+    "name": "roomies/phonable",
+    "description": "Gather insights and verify phone numbers from multiple third-party providers.",
+    "keywords": [
+        "roomies",
+        "laravel",
+        "phonable"
+    ],
+    "homepage": "https://github.com/roomies-com/phonable",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dwight Watson",
+            "email": "hello@roomies.com"
+        }
+    ],
+    "require": {
+        "php": "^8.2|^8.3",
+        "guzzlehttp/guzzle": "^7.8",
+        "illuminate/contracts": "^10.0",
+        "illuminate/support": "^10.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.0",
+        "laravel/vonage-notification-channel": "^3.2",
+        "orchestra/testbench": "^8.18",
+        "phpunit/phpunit": "^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Roomies\\Phonable\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Roomies\\Phonable\\Tests\\": "tests/",
+            "Workbench\\App\\": "workbench/app/",
+            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
+        "format": "vendor/bin/pint",
+        "post-autoload-dump": [
+            "@clear",
+            "@prepare"
+        ],
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "@build",
+            "@php vendor/bin/testbench serve"
+        ],
+        "lint": [
+            "@php vendor/bin/pint"
+        ]
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Roomies\\Phonable\\PhonableServiceProvider"
+            ]
+        }
+    },
+    "suggest": {
+        "laravel/vonage-notification-channel": "Required to use the Vonage driver (^3.0)."
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
