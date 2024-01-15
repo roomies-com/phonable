@@ -24,7 +24,8 @@
         "laravel/pint": "^1.0",
         "laravel/vonage-notification-channel": "^3.2",
         "orchestra/testbench": "^8.18",
-        "phpunit/phpunit": "^10.0"
+        "phpunit/phpunit": "^10.0",
+        "vonage/client-core": "^4.6.0"
     },
     "autoload": {
         "psr-4": {
