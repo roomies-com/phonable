@@ -2,6 +2,7 @@
 
 namespace Roomies\Phonable\Facades;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Facade;
 use Roomies\Phonable\Identification\IdentificationFake;
 
