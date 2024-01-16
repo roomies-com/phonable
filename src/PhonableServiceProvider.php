@@ -12,7 +12,7 @@ class PhonableServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(
-            abstract: 'phone-insights',
+            abstract: 'phone-identification',
             concrete: Insights\Manager::class
         );
 
