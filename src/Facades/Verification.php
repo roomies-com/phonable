@@ -1,6 +1,6 @@
 <?php
 
-namespace Roomies\Phonable;
+namespace Roomies\Phonable\Facades;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Facade;

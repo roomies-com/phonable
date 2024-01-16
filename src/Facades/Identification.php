@@ -1,6 +1,6 @@
 <?php
 
-namespace Roomies\Phonable;
+namespace Roomies\Phonable\Facades;
 
 use Illuminate\Support\Facades\Facade;
 use Roomies\Phonable\Identification\IdentificationFake;
