@@ -13,7 +13,7 @@ class PhonableServiceProvider extends ServiceProvider
     {
         $this->app->bind(
             abstract: 'phone-identification',
-            concrete: Insights\Manager::class
+            concrete: Identification\Manager::class
         );
 
         $this->app->bind(

@@ -5,7 +5,7 @@ namespace Roomies\Phonable\Identification;
 readonly class IdentificationResult
 {
     /**
-     * Create a new insights instance.
+     * Create a new identification result instance.
      */
     public function __construct(
         public ?string $carrierName = null,
