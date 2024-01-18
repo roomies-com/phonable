@@ -1,10 +1,11 @@
 <?php
 
-namespace Roomies\Phonable\Identification;
+namespace Roomies\Phonable\Testing;
 
 use Illuminate\Support\Testing\Fakes\Fake;
 use Roomies\Phonable\Contracts\IdentifiesPhoneNumbers;
 use Roomies\Phonable\Contracts\PhoneIdentifiable;
+use Roomies\Phonable\Identification\IdentificationResult;
 
 class IdentificationFake implements Fake, IdentifiesPhoneNumbers
 {

@@ -1,12 +1,14 @@
 <?php
 
-namespace Roomies\Phonable\Verification;
+namespace Roomies\Phonable\Testing;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Testing\Fakes\Fake;
 use PHPUnit\Framework\Assert as PHPUnit;
 use Roomies\Phonable\Contracts\PhoneVerifiable;
 use Roomies\Phonable\Contracts\VerifiesPhoneNumbers;
+use Roomies\Phonable\Verification\VerificationRequest;
+use Roomies\Phonable\Verification\VerificationResult;
 
 class VerificationFake implements Fake, VerifiesPhoneNumbers
 {

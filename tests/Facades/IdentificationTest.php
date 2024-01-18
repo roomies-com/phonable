@@ -3,7 +3,7 @@
 namespace Roomies\Phonable\Tests\Facades;
 
 use Roomies\Phonable\Facades\Identification;
-use Roomies\Phonable\Identification\IdentificationFake;
+use Roomies\Phonable\Testing\IdentificationFake;
 use Roomies\Phonable\Tests\TestCase;
 
 class IdentificationTest extends TestCase

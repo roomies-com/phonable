@@ -1,10 +1,11 @@
 <?php
 
-namespace Roomies\Phonable\Tests\Verification;
+namespace Roomies\Phonable\Tests\Testing;
 
 use PHPUnit\Framework\ExpectationFailedException;
+use Roomies\Phonable\Testing\VerificationFake;
 use Roomies\Phonable\Tests\TestCase;
-use Roomies\Phonable\Verification\VerificationFake;
+use Roomies\Phonable\Tests\Verification\Verifiable;
 use Roomies\Phonable\Verification\VerificationResult;
 
 class VerificationFakeTest extends TestCase

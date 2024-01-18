@@ -1,9 +1,10 @@
 <?php
 
-namespace Roomies\Phonable\Tests\Identification;
+namespace Roomies\Phonable\Tests\Testing;
 
-use Roomies\Phonable\Identification\IdentificationFake;
 use Roomies\Phonable\Identification\IdentificationResult;
+use Roomies\Phonable\Testing\IdentificationFake;
+use Roomies\Phonable\Tests\Identification\Identifiable;
 use Roomies\Phonable\Tests\TestCase;
 
 class IdentificationFakeTest extends TestCase

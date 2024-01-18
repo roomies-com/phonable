@@ -3,8 +3,8 @@
 namespace Roomies\Phonable\Tests\Facades;
 
 use Roomies\Phonable\Facades\Verification;
+use Roomies\Phonable\Testing\VerificationFake;
 use Roomies\Phonable\Tests\TestCase;
-use Roomies\Phonable\Verification\VerificationFake;
 
 class VerificationTest extends TestCase
 {
