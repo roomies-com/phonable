@@ -11,6 +11,10 @@ class PhonableServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->mergeConfigFrom(
+            __DIR__.'/../config/phonable.php', 'phonable'
+        );
+
         $this->app->bind(
             abstract: 'phone-identification',
             concrete: Identification\Manager::class
