@@ -103,7 +103,7 @@ class User implements PhoneVerifiable
 $request = Verification::send($user);
 
 $user->update([
-  'phone_verification_session' => $request->id,
+    'phone_verification_session' => $request->id,
 ]);
 ```
 
@@ -118,10 +118,10 @@ use Roomies\Phonable\Verification\VerificationResult;
 $result = Verification::verify($user, 1234);
 
 if ($result === VerificationResult::Successful) {
-  $user->update([
-    'phone_verified_at' => now(),
-    'phone_verification_session' => null,
-  ]);
+    $user->update([
+      'phone_verified_at' => now(),
+      'phone_verification_session' => null,
+    ]);
 }
 ```
 
