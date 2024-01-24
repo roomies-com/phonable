@@ -3,6 +3,7 @@
 namespace Roomies\Phonable\Identification;
 
 use Illuminate\Support\Manager as BaseManager;
+use Vonage\Client;
 
 class Manager extends BaseManager
 {
@@ -31,9 +32,6 @@ class Manager extends BaseManager
      */
     public function createVonageDriver(): Vonage
     {
-        return new Vonage(
-            $this->config['phonable.services.vonage.key'],
-            $this->config['phonable.services.vonage.secret']
-        );
+        return new Vonage($this->getContainer()->make(Client::class));
     }
 }

@@ -57,9 +57,7 @@ return [
         ],
 
         'vonage' => [
-            'brand' => env('APP_NAME', 'Laravel'),
-            'key' => env('VONAGE_KEY'),
-            'secret' => env('VONAGE_SECRET'),
+            // See https://github.com/laravel/vonage-notification-channel for Vonage configuration
         ],
 
     ],
