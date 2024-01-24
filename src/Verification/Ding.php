@@ -30,9 +30,9 @@ class Ding implements VerifiesPhoneNumbers
     /**
      * Send the phone number verification code.
      */
-    public function send(PhoneVerifiable $verifiable): VerificationRequest
+    public function send(string|PhoneVerifiable $verifiable): VerificationRequest
     {
-        $phoneNumber = $verifiable->getVerifiablePhoneNumber();
+        $phoneNumber = $this->getPhoneNumber($verifiable);
 
         $response = $this->client
             ->post('/authentication', [
@@ -51,7 +51,7 @@ class Ding implements VerifiesPhoneNumbers
     /**
      * Attempt to complete a phone verification flow.
      */
-    public function verify(PhoneVerifiable $verifiable, string $code): VerificationResult
+    public function verify(string|PhoneVerifiable $verifiable, string $code): VerificationResult
     {
         $response = $this->client
             ->post('/check', [
@@ -68,5 +68,15 @@ class Ding implements VerifiesPhoneNumbers
             'expired_auth' => VerificationResult::Expired,
             default => VerificationResult::Invalid,
         };
+    }
+
+    /**
+     * Get the phone number off a PhoneVerifiable instance if provided.
+     */
+    protected function getPhoneNumber(string|PhoneVerifiable $verifiable): ?string
+    {
+        return $verifiable instanceof PhoneVerifiable
+            ? $verifiable->getVerifiablePhoneNumber()
+            : $verifiable;
     }
 }

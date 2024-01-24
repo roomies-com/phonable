@@ -35,8 +35,12 @@ class IdentificationFake implements Fake, IdentifiesPhoneNumbers
     /**
      * Fetch the identification for the given phone number.
      */
-    public function get(PhoneIdentifiable $identifiable): ?IdentificationResult
+    public function get(string|PhoneIdentifiable $identifiable): ?IdentificationResult
     {
-        return $this->responses[$identifiable->getIdentifiablePhoneNumber()] ?? null;
+        $phoneNumber = $identifiable instanceof PhoneIdentifiable
+            ? $identifiable->getIdentifiablePhoneNumber()
+            : $identifiable;
+
+        return $this->responses[$phoneNumber] ?? null;
     }
 }

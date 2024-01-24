@@ -17,6 +17,20 @@ class VonageTest extends TestCase
             ], 200),
         ]);
 
+        $result = app(Vonage::class)->send('+12125550000');
+
+        $this->assertEquals('abc-123', $result->id);
+        $this->assertEquals('+12125550000', $result->phoneNumber);
+    }
+
+    public function test_send_creates_verification_request_with_verifiable()
+    {
+        Http::fake([
+            'api.nexmo.com/v2/verify' => Http::response([
+                'request_id' => 'abc-123',
+            ], 200),
+        ]);
+
         $verifiable = new Verifiable;
 
         $result = app(Vonage::class)->send($verifiable);

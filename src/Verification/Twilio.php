@@ -30,9 +30,9 @@ class Twilio implements VerifiesPhoneNumbers
     /**
      * Send the phone number verification code.
      */
-    public function send(PhoneVerifiable $verifiable): VerificationRequest
+    public function send(string|PhoneVerifiable $verifiable): VerificationRequest
     {
-        $phoneNumber = $verifiable->getVerifiablePhoneNumber();
+        $phoneNumber = $this->getPhoneNumber($verifiable);
 
         $response = $this->client
             ->asForm()
@@ -50,9 +50,9 @@ class Twilio implements VerifiesPhoneNumbers
     /**
      * Attempt to complete a phone verification flow.
      */
-    public function verify(PhoneVerifiable $verifiable, string $code): VerificationResult
+    public function verify(string|PhoneVerifiable $verifiable, string $code): VerificationResult
     {
-        $phoneNumber = $verifiable->getVerifiablePhoneNumber();
+        $phoneNumber = $this->getPhoneNumber($verifiable);
 
         $response = $this->client
             ->asForm()
@@ -70,5 +70,15 @@ class Twilio implements VerifiesPhoneNumbers
             'pending' => VerificationResult::Invalid,
             'canceled' => VerificationResult::Expired,
         };
+    }
+
+    /**
+     * Get the phone number off a PhoneVerifiable instance if provided.
+     */
+    protected function getPhoneNumber(string|PhoneVerifiable $verifiable): ?string
+    {
+        return $verifiable instanceof PhoneVerifiable
+            ? $verifiable->getVerifiablePhoneNumber()
+            : $verifiable;
     }
 }

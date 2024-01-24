@@ -26,7 +26,12 @@ Read through the config file to understand the supported services and provide th
 
 Identification is a way to gather more information about a phone number including the country of origin, phone number type and more. This feature is supported by Ding and Vonage.
 
-Your identifiable record should implement `Roomies\Phonable\Contracts\PhoneIdentifiable` - `getIdentifiablePhoneNumber()` should return the phone number in E.164 format.
+```php
+// Return an instance of \Roomies\Phonable\Identification\IdentificationResult
+$result = Identification::get('+12125550000');
+```
+
+Alternatively you can pass an object that implements `Roomies\Phonable\Contracts\PhoneIdentifiable` - `getIdentifiablePhoneNumber()` should return the phone number in E.164 format.
 
 ```php
 use Roomies\Phonable\Facades\Identification;
@@ -44,7 +49,7 @@ class User implements PhoneIdentifiable
 }
 
 // Return an instance of \Roomies\Phonable\Identification\IdentificationResult
-$result = Identification::handle($user);
+$result = Identification::get($user);
 ```
 
 You can swap the driver out on the fly as necessary.
@@ -52,14 +57,24 @@ You can swap the driver out on the fly as necessary.
 ```php
 use Roomies\Phonable\Facades\Identification;
 
-Identification::driver('ding')->handle($user);
+Identification::driver('ding')->get($user);
 ```
 
 ## Verification
 
 Verification is a two-step process in sending a generated code to a phone number that then needs to be entered back into your app to complete the process. This ensures your user has timely access to the phone number provided. This feature is supported by Ding, Twilio, and Vonage.
 
-Your verifiable record should implement `Roomies\Phonable\Contracts\PhoneVerifiable` - `getVerifiablePhoneNumber()` should return the phone number in E.164 format and `getVerifiableSession()` should return the previously stored verification request ID.
+
+
+```php
+// Return an instance of \Roomies\Phonable\Verification\VerificationRequest
+$request = Verification::send('+12125550000');
+
+// Return an instance of \Roomies\Phonable\Verification\VerificationResult
+$result = Verification::verify($request->id, 'code');
+```
+
+Alternatively you can pass an object that implements `Roomies\Phonable\Contracts\PhoneVerifiable` - `getVerifiablePhoneNumber()` should return the phone number in E.164 format and `getVerifiableSession()` should return the previously stored verification request ID.
 
 ```php
 use Roomies\Phonable\Facades\Verification;
