@@ -9,5 +9,5 @@ interface IdentifiesPhoneNumbers
     /**
      * Fetch the identification for the given phone number.
      */
-    public function handle(PhoneIdentifiable $identifiable): ?IdentificationResult;
+    public function get(PhoneIdentifiable $identifiable): ?IdentificationResult;
 }

@@ -34,7 +34,7 @@ class VonageTest extends TestCase
                 ->andReturn($standardCnam);
         });
 
-        $result = app(Vonage::class)->handle($identifiable);
+        $result = app(Vonage::class)->get($identifiable);
 
         $this->assertEquals('Verizon Wireless', $result->carrierName);
         $this->assertEquals('Thomas Clement', $result->callerName);
@@ -59,7 +59,7 @@ class VonageTest extends TestCase
                 ->andReturn($standard);
         });
 
-        $result = app(Vonage::class)->handle($identifiable);
+        $result = app(Vonage::class)->get($identifiable);
 
         $this->assertEquals('Verizon Wireless', $result->carrierName);
         $this->assertNull($result->callerName);
@@ -75,7 +75,7 @@ class VonageTest extends TestCase
                 ->andThrow(new RequestException);
         });
 
-        $result = app(Vonage::class)->handle($identifiable);
+        $result = app(Vonage::class)->get($identifiable);
 
         $this->assertNull($result);
     }

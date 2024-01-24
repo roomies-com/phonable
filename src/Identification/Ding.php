@@ -31,7 +31,7 @@ class Ding implements IdentifiesPhoneNumbers
     /**
      * Fetch the identification for the given phone number.
      */
-    public function handle(PhoneIdentifiable $identifiable): ?IdentificationResult
+    public function get(PhoneIdentifiable $identifiable): ?IdentificationResult
     {
         $response = $this->client->get("/lookup/{$identifiable->getIdentifiablePhoneNumber()}");
 

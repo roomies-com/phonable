@@ -23,7 +23,7 @@ class Vonage implements IdentifiesPhoneNumbers
     /**
      * Fetch the identification for the given phone number.
      */
-    public function handle(PhoneIdentifiable $identifiable): ?IdentificationResult
+    public function get(PhoneIdentifiable $identifiable): ?IdentificationResult
     {
         $method = Str::startsWith($identifiable->getIdentifiablePhoneNumber(), '+1')
             ? 'standardCnam'

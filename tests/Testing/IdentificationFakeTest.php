@@ -24,7 +24,7 @@ class IdentificationFakeTest extends TestCase
             '+12125550000' => new IdentificationResult,
         ]);
 
-        $result = $fake->handle($this->identifiable);
+        $result = $fake->get($this->identifiable);
 
         $this->assertInstanceOf(IdentificationResult::class, $result);
     }
@@ -33,7 +33,7 @@ class IdentificationFakeTest extends TestCase
     {
         $fake = new IdentificationFake();
 
-        $result = $fake->handle($this->identifiable);
+        $result = $fake->get($this->identifiable);
 
         $this->assertNull($result);
     }

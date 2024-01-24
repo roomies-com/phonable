@@ -22,7 +22,7 @@ class DingTest extends TestCase
             ], 200, ['content-type' => 'application/json']),
         ]);
 
-        $result = app(Ding::class)->handle($identifiable);
+        $result = app(Ding::class)->get($identifiable);
 
         $this->assertEquals('carrier_name', $result->carrierName);
         $this->assertEquals('carrier_country', $result->carrierCountry);
@@ -37,7 +37,7 @@ class DingTest extends TestCase
             'api.ding.live/v1/lookup/+12125550000' => Http::response(null, 404),
         ]);
 
-        $result = app(Ding::class)->handle($identifiable);
+        $result = app(Ding::class)->get($identifiable);
 
         $this->assertNull($result);
     }
