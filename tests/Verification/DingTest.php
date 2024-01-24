@@ -47,6 +47,19 @@ class DingTest extends TestCase
             ], 200),
         ]);
 
+        $result = app(Ding::class)->verify('request-id', '1234');
+
+        $this->assertEquals(VerificationResult::Successful, $result);
+    }
+
+    public function test_verify_returns_for_valid_code_with_verifiable()
+    {
+        Http::fake([
+            'api.ding.live/v1/check' => Http::response([
+                'status' => 'valid',
+            ], 200),
+        ]);
+
         $verifiable = new Verifiable(sessionId: 'request-id');
 
         $result = app(Ding::class)->verify($verifiable, '1234');
@@ -62,9 +75,7 @@ class DingTest extends TestCase
             ], 200),
         ]);
 
-        $verifiable = new Verifiable(sessionId: 'request-id');
-
-        $result = app(Ding::class)->verify($verifiable, '1234');
+        $result = app(Ding::class)->verify('request-id', '1234');
 
         $this->assertEquals(VerificationResult::Successful, $result);
     }
@@ -77,9 +88,7 @@ class DingTest extends TestCase
             ], 200),
         ]);
 
-        $verifiable = new Verifiable(sessionId: 'request-id');
-
-        $result = app(Ding::class)->verify($verifiable, '1234');
+        $result = app(Ding::class)->verify('request-id', '1234');
 
         $this->assertEquals(VerificationResult::Expired, $result);
     }
@@ -92,9 +101,7 @@ class DingTest extends TestCase
             ], 200),
         ]);
 
-        $verifiable = new Verifiable(sessionId: 'request-id');
-
-        $result = app(Ding::class)->verify($verifiable, '5678');
+        $result = app(Ding::class)->verify('request-id', '5678');
 
         $this->assertEquals(VerificationResult::NotFound, $result);
     }
@@ -107,9 +114,7 @@ class DingTest extends TestCase
             ], 200),
         ]);
 
-        $verifiable = new Verifiable(sessionId: 'request-id');
-
-        $result = app(Ding::class)->verify($verifiable, '5678');
+        $result = app(Ding::class)->verify('request-id', '5678');
 
         $this->assertEquals(VerificationResult::Invalid, $result);
     }

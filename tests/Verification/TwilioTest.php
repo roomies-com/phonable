@@ -47,6 +47,19 @@ class TwilioTest extends TestCase
             ], 200),
         ]);
 
+        $result = $this->getTwilio()->verify('request-id', '1234');
+
+        $this->assertEquals(VerificationResult::Successful, $result);
+    }
+
+    public function test_verify_returns_for_valid_code_with_verifiable()
+    {
+        Http::fake([
+            'verify.twilio.com/v2/Services/service_sid/VerificationCheck' => Http::response([
+                'status' => 'approved',
+            ], 200),
+        ]);
+
         $verifiable = new Verifiable(sessionId: 'request-id');
 
         $result = $this->getTwilio()->verify($verifiable, '1234');
@@ -62,9 +75,7 @@ class TwilioTest extends TestCase
             ], 200),
         ]);
 
-        $verifiable = new Verifiable(sessionId: 'request-id');
-
-        $result = $this->getTwilio()->verify($verifiable, '1234');
+        $result = $this->getTwilio()->verify('request-id', '1234');
 
         $this->assertEquals(VerificationResult::Expired, $result);
     }
@@ -76,9 +87,7 @@ class TwilioTest extends TestCase
             ], 404),
         ]);
 
-        $verifiable = new Verifiable(sessionId: 'request-id');
-
-        $result = $this->getTwilio()->verify($verifiable, '5678');
+        $result = $this->getTwilio()->verify('request-id', '5678');
 
         $this->assertEquals(VerificationResult::NotFound, $result);
     }
@@ -91,9 +100,7 @@ class TwilioTest extends TestCase
             ], 200),
         ]);
 
-        $verifiable = new Verifiable(sessionId: 'request-id');
-
-        $result = $this->getTwilio()->verify($verifiable, '5678');
+        $result = $this->getTwilio()->verify('request-id', '5678');
 
         $this->assertEquals(VerificationResult::Invalid, $result);
     }

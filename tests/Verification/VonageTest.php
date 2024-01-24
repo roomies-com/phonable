@@ -45,6 +45,17 @@ class VonageTest extends TestCase
             'api.nexmo.com/v2/verify/request-id' => Http::response([], 200),
         ]);
 
+        $result = app(Vonage::class)->verify('request-id', '1234');
+
+        $this->assertEquals(VerificationResult::Successful, $result);
+    }
+
+    public function test_verify_returns_for_valid_code_with_verifiable()
+    {
+        Http::fake([
+            'api.nexmo.com/v2/verify/request-id' => Http::response([], 200),
+        ]);
+
         $verifiable = new Verifiable(sessionId: 'request-id');
 
         $result = app(Vonage::class)->verify($verifiable, '1234');
@@ -58,9 +69,7 @@ class VonageTest extends TestCase
             'api.nexmo.com/v2/verify/request-id' => Http::response([], 410),
         ]);
 
-        $verifiable = new Verifiable(sessionId: 'request-id');
-
-        $result = app(Vonage::class)->verify($verifiable, '1234');
+        $result = app(Vonage::class)->verify('request-id', '1234');
 
         $this->assertEquals(VerificationResult::Expired, $result);
     }
@@ -71,9 +80,7 @@ class VonageTest extends TestCase
             'api.nexmo.com/v2/verify/request-id' => Http::response([], 404),
         ]);
 
-        $verifiable = new Verifiable(sessionId: 'request-id');
-
-        $result = app(Vonage::class)->verify($verifiable, '5678');
+        $result = app(Vonage::class)->verify('request-id', '5678');
 
         $this->assertEquals(VerificationResult::NotFound, $result);
     }
@@ -84,9 +91,7 @@ class VonageTest extends TestCase
             'api.nexmo.com/v2/verify/request-id' => Http::response([], 400),
         ]);
 
-        $verifiable = new Verifiable(sessionId: 'request-id');
-
-        $result = app(Vonage::class)->verify($verifiable, '5678');
+        $result = app(Vonage::class)->verify('request-id', '5678');
 
         $this->assertEquals(VerificationResult::Invalid, $result);
     }

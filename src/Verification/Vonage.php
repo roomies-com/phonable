@@ -60,8 +60,10 @@ class Vonage implements VerifiesPhoneNumbers
      */
     public function verify(string|PhoneVerifiable $verifiable, string $code): VerificationResult
     {
+        $session = $this->getVerifiableSession($verifiable);
+
         $response = $this->client
-            ->post("/v2/verify/{$verifiable->getVerifiableSession()}", [
+            ->post("/v2/verify/{$session}", [
                 'code' => $code,
             ]);
 
@@ -87,6 +89,16 @@ class Vonage implements VerifiesPhoneNumbers
     {
         return $verifiable instanceof PhoneVerifiable
             ? $verifiable->getVerifiablePhoneNumber()
+            : $verifiable;
+    }
+
+    /**
+     * Get the phone verification session off a PhoneVerifiable instance if provided.
+     */
+    protected function getVerifiableSession(string|PhoneVerifiable $verifiable): ?string
+    {
+        return $verifiable instanceof PhoneVerifiable
+            ? $verifiable->getVerifiableSession()
             : $verifiable;
     }
 }

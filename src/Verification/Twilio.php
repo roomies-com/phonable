@@ -52,12 +52,12 @@ class Twilio implements VerifiesPhoneNumbers
      */
     public function verify(string|PhoneVerifiable $verifiable, string $code): VerificationResult
     {
-        $phoneNumber = $this->getPhoneNumber($verifiable);
+        $session = $this->getVerifiableSession($verifiable);
 
         $response = $this->client
             ->asForm()
             ->post('/VerificationCheck', [
-                'VerificationSid' => $verifiable->getVerifiableSession(),
+                'VerificationSid' => $session,
                 'Code' => $code,
             ]);
 
@@ -79,6 +79,16 @@ class Twilio implements VerifiesPhoneNumbers
     {
         return $verifiable instanceof PhoneVerifiable
             ? $verifiable->getVerifiablePhoneNumber()
+            : $verifiable;
+    }
+
+    /**
+     * Get the phone verification session off a PhoneVerifiable instance if provided.
+     */
+    protected function getVerifiableSession(string|PhoneVerifiable $verifiable): ?string
+    {
+        return $verifiable instanceof PhoneVerifiable
+            ? $verifiable->getVerifiableSession()
             : $verifiable;
     }
 }
