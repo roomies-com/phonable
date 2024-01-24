@@ -12,6 +12,32 @@ use Vonage\Insights\StandardCnam;
 
 class VonageTest extends TestCase
 {
+    public function test_it_handles_string()
+    {
+        $phoneNumber = '+12125550000';
+
+        $standardCnam = new StandardCnam($phoneNumber);
+        $standardCnam->fromArray([
+            'current_carrier' => [
+                'name' => 'Verizon Wireless',
+                'country' => 'US',
+                'network_type' => 'mobile',
+            ],
+            'caller_name' => 'Thomas Clement',
+        ]);
+
+        $this->mockResponse(function ($insights) use ($phoneNumber, $standardCnam) {
+            $insights->shouldReceive('standardCnam')
+                ->with($phoneNumber)
+                ->andReturn($standardCnam);
+        });
+
+        $result = app(Vonage::class)->get($phoneNumber);
+
+        $this->assertEquals('Verizon Wireless', $result->carrierName);
+        $this->assertEquals('Thomas Clement', $result->callerName);
+    }
+
     public function test_it_handle_us_number()
     {
         $identifiable = new Identifiable(

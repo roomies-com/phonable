@@ -23,15 +23,19 @@ class Vonage implements IdentifiesPhoneNumbers
     /**
      * Fetch the identification for the given phone number.
      */
-    public function get(PhoneIdentifiable $identifiable): ?IdentificationResult
+    public function get(string|PhoneIdentifiable $identifiable): ?IdentificationResult
     {
-        $method = Str::startsWith($identifiable->getIdentifiablePhoneNumber(), '+1')
+        $phoneNumber = $identifiable instanceof PhoneIdentifiable
+            ? $identifiable->getIdentifiablePhoneNumber()
+            : $identifiable;
+
+        $method = Str::startsWith($phoneNumber, '+1')
             ? 'standardCnam'
             : 'standard';
 
         try {
             $insight = $this->vonage->insights()
-                ->{$method}($identifiable->getIdentifiablePhoneNumber());
+                ->{$method}($phoneNumber);
         } catch (RequestException $exception) {
             return null;
         }

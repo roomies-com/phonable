@@ -8,6 +8,23 @@ use Roomies\Phonable\Tests\TestCase;
 
 class DingTest extends TestCase
 {
+    public function test_it_handles_string()
+    {
+        Http::fake([
+            'api.ding.live/v1/lookup/+12125550000' => Http::response([
+                'carrier' => 'carrier_name',
+                'country_code' => 'carrier_country',
+                'line_type' => 'network_type',
+            ], 200, ['content-type' => 'application/json']),
+        ]);
+
+        $result = app(Ding::class)->get('+12125550000');
+
+        $this->assertEquals('carrier_name', $result->carrierName);
+        $this->assertEquals('carrier_country', $result->carrierCountry);
+        $this->assertEquals('network_type', $result->networkType);
+    }
+
     public function test_it_handle_us_number()
     {
         $identifiable = new Identifiable(

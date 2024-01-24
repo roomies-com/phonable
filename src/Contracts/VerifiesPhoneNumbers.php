@@ -10,10 +10,10 @@ interface VerifiesPhoneNumbers
     /**
      * Send the phone number verification code.
      */
-    public function send(PhoneVerifiable $verifiable): VerificationRequest;
+    public function send(string|PhoneVerifiable $verifiable): VerificationRequest;
 
     /**
      * Attempt to verify the phone number code.
      */
-    public function verify(PhoneVerifiable $verifiable, string $code): VerificationResult;
+    public function verify(string|PhoneVerifiable $verifiable, string $code): VerificationResult;
 }
