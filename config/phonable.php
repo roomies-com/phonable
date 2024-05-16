@@ -10,11 +10,11 @@ return [
     | This option controls the default identification driver when using this
     | feature. You can swap this driver on the fly if required.
     |
-    | Supported drivers: "ding", "vonage"
+    | Supported drivers: "prelude", "vonage"
     |
     */
     'identification' => [
-        'default' => env('PHONE_IDENTIFICATION_SERVICE', 'ding'),
+        'default' => env('PHONE_IDENTIFICATION_SERVICE', 'prelude'),
     ],
 
     /*
@@ -25,11 +25,11 @@ return [
     | This option controls the default verification driver when using this
     | feature. You can swap this driver on the fly if required.
     |
-    | Supported drivers: "ding", "twilio", "vonage"
+    | Supported drivers: "prelude", "twilio", "vonage"
     |
     */
     'verification' => [
-        'default' => env('PHONE_VERIFICATION_SERVICE', 'ding'),
+        'default' => env('PHONE_VERIFICATION_SERVICE', 'prelude'),
     ],
 
     /*
@@ -40,14 +40,14 @@ return [
     | Here you can configure the required credentials and additional metadata
     | for each supported external phone service.
     |
-    | Supported drivers: "ding", "twilio", "vonage"
+    | Supported drivers: "prelude", "twilio", "vonage"
     |
     */
     'services' => [
 
-        'ding' => [
-            'key' => env('DING_KEY'),
-            'customer_uuid' => env('DING_CUSTOMER_UUID'),
+        'prelude' => [
+            'key' => env('PRELUDE_KEY'),
+            'customer_uuid' => env('PRELUDE_CUSTOMER_UUID'),
         ],
 
         'twilio' => [
