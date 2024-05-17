@@ -4,10 +4,10 @@ namespace Roomies\Phonable\Tests\Verification;
 
 use Illuminate\Support\Facades\Http;
 use Roomies\Phonable\Tests\TestCase;
-use Roomies\Phonable\Verification\Ding;
+use Roomies\Phonable\Verification\Prelude;
 use Roomies\Phonable\Verification\VerificationResult;
 
-class DingTest extends TestCase
+class PreludeTest extends TestCase
 {
     public function test_send_creates_verification_request()
     {
@@ -17,7 +17,7 @@ class DingTest extends TestCase
             ], 200),
         ]);
 
-        $result = app(Ding::class)->send('+12125550000');
+        $result = app(Prelude::class)->send('+12125550000');
 
         $this->assertEquals('abc-123', $result->id);
         $this->assertEquals('+12125550000', $result->phoneNumber);
@@ -33,7 +33,7 @@ class DingTest extends TestCase
 
         $verifiable = new Verifiable;
 
-        $result = app(Ding::class)->send($verifiable);
+        $result = app(Prelude::class)->send($verifiable);
 
         $this->assertEquals('abc-123', $result->id);
         $this->assertEquals($verifiable->getVerifiablePhoneNumber(), $result->phoneNumber);
@@ -47,7 +47,7 @@ class DingTest extends TestCase
             ], 200),
         ]);
 
-        $result = app(Ding::class)->verify('request-id', '1234');
+        $result = app(Prelude::class)->verify('request-id', '1234');
 
         $this->assertEquals(VerificationResult::Successful, $result);
     }
@@ -62,7 +62,7 @@ class DingTest extends TestCase
 
         $verifiable = new Verifiable(sessionId: 'request-id');
 
-        $result = app(Ding::class)->verify($verifiable, '1234');
+        $result = app(Prelude::class)->verify($verifiable, '1234');
 
         $this->assertEquals(VerificationResult::Successful, $result);
     }
@@ -75,7 +75,7 @@ class DingTest extends TestCase
             ], 200),
         ]);
 
-        $result = app(Ding::class)->verify('request-id', '1234');
+        $result = app(Prelude::class)->verify('request-id', '1234');
 
         $this->assertEquals(VerificationResult::Successful, $result);
     }
@@ -88,7 +88,7 @@ class DingTest extends TestCase
             ], 200),
         ]);
 
-        $result = app(Ding::class)->verify('request-id', '1234');
+        $result = app(Prelude::class)->verify('request-id', '1234');
 
         $this->assertEquals(VerificationResult::Expired, $result);
     }
@@ -101,7 +101,7 @@ class DingTest extends TestCase
             ], 200),
         ]);
 
-        $result = app(Ding::class)->verify('request-id', '5678');
+        $result = app(Prelude::class)->verify('request-id', '5678');
 
         $this->assertEquals(VerificationResult::NotFound, $result);
     }
@@ -114,7 +114,7 @@ class DingTest extends TestCase
             ], 200),
         ]);
 
-        $result = app(Ding::class)->verify('request-id', '5678');
+        $result = app(Prelude::class)->verify('request-id', '5678');
 
         $this->assertEquals(VerificationResult::Invalid, $result);
     }

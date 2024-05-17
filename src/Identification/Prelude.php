@@ -8,7 +8,7 @@ use Roomies\Phonable\Contracts\IdentifiesPhoneNumbers;
 use Roomies\Phonable\Contracts\PhoneIdentifiable;
 use SensitiveParameter;
 
-class Ding implements IdentifiesPhoneNumbers
+class Prelude implements IdentifiesPhoneNumbers
 {
     /**
      * The authenticated HTTP client.
@@ -16,7 +16,7 @@ class Ding implements IdentifiesPhoneNumbers
     protected PendingRequest $client;
 
     /**
-     * Create a new Ding instance.
+     * Create a new Prelude instance.
      */
     public function __construct(
         #[SensitiveParameter] protected string $apiKey = '',

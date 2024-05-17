@@ -16,13 +16,13 @@ class Manager extends BaseManager
     }
 
     /**
-     * Create an instance of the Ding driver.
+     * Create an instance of the Prelude driver.
      */
-    public function createDingDriver(): Ding
+    public function createPreludeDriver(): Prelude
     {
-        return new Ding(
-            $this->config['phonable.services.ding.key'],
-            $this->config['phonable.services.ding.customer_uuid'],
+        return new Prelude(
+            $this->config['phonable.services.prelude.key'],
+            $this->config['phonable.services.prelude.customer_uuid'],
             $this->getContainer()->make('request')->ip(),
         );
     }
