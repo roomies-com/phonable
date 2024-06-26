@@ -19,7 +19,8 @@ class Manager extends MultipleInstanceManager
      */
     public function getDefaultInstance()
     {
-        return $this->defaultInstance ?? $this->config['phonable.identification_service'];
+        return $this->defaultInstance
+            ?? $this->app['config']->get('phonable.identification_service');
     }
 
     /**
@@ -41,7 +42,7 @@ class Manager extends MultipleInstanceManager
      */
     public function getInstanceConfig($name)
     {
-        return config("phonable.services.{$name}");
+        return $this->app['config']->get("phonable.services.{$name}");
     }
 
     /**
@@ -50,7 +51,7 @@ class Manager extends MultipleInstanceManager
     public function createPreludeDriver(array $config): Prelude
     {
         return new Prelude(
-            $config['key'], $config['customer_uuid'], $this->app->make('request')->ip(),
+            $config['key'], $config['customer_uuid'], $this->app['request']->ip(),
         );
     }
 
