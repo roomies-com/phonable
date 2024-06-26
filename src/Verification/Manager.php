@@ -12,25 +12,33 @@ class Manager extends MultipleInstanceManager
     protected ?string $defaultInstance;
 
     /**
-     * Get the default driver name.
+     * Get the default instance name.
+     *
+     * @return string
      */
-    public function getDefaultInstance(): string
+    public function getDefaultInstance()
     {
         return $this->defaultInstance ?? $this->config['phonable.verification_service'];
     }
 
     /**
      * Set the default instance name.
+     *
+     * @param  string  $name
+     * @return void
      */
-    public function setDefaultInstance(string $name): void
+    public function setDefaultInstance($name)
     {
         $this->defaultInstance = $name;
     }
 
     /**
      * Get the instance specific configuration.
+     *
+     * @param  string  $name
+     * @return array
      */
-    public function getInstanceConfig(string $name): array
+    public function getInstanceConfig($name)
     {
         return config("phonable.services.{$name}");
     }
