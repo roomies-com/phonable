@@ -64,8 +64,6 @@ Identification::driver('prelude')->get($user);
 
 Verification is a two-step process in sending a generated code to a phone number that then needs to be entered back into your app to complete the process. This ensures your user has timely access to the phone number provided. This feature is supported by Prelude, Twilio, and Vonage.
 
-
-
 ```php
 // Return an instance of \Roomies\Phonable\Verification\VerificationRequest
 $request = Verification::send('+12125550000');
@@ -119,8 +117,8 @@ $result = Verification::verify($user, 1234);
 
 if ($result === VerificationResult::Successful) {
     $user->update([
-      'phone_verified_at' => now(),
-      'phone_verification_session' => null,
+        'phone_verified_at' => now(),
+        'phone_verification_session' => null,
     ]);
 }
 ```
