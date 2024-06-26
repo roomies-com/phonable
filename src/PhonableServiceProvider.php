@@ -17,12 +17,12 @@ class PhonableServiceProvider extends ServiceProvider
 
         $this->app->bind(
             abstract: 'phone-identification',
-            concrete: Identification\Manager::class
+            concrete: fn ($app) => new Identification\Manager($app),
         );
 
         $this->app->bind(
             abstract: 'phone-verification',
-            concrete: Verification\Manager::class
+            concrete: fn ($app) => new Verification\Manager($app),
         );
     }
 

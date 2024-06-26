@@ -2,36 +2,64 @@
 
 namespace Roomies\Phonable\Identification;
 
-use Illuminate\Support\Manager as BaseManager;
+use Illuminate\Support\MultipleInstanceManager;
 use Vonage\Client;
 
-class Manager extends BaseManager
+class Manager extends MultipleInstanceManager
 {
     /**
-     * Get the default driver name.
+     * The name of the default instance.
      */
-    public function getDefaultDriver(): string
+    protected ?string $defaultInstance;
+
+    /**
+     * Get the default driver name.
+     *
+     * @return string
+     */
+    public function getDefaultInstance()
     {
-        return $this->config['phonable.identification.default'];
+        return $this->defaultInstance
+            ?? $this->app['config']->get('phonable.identification_service');
+    }
+
+    /**
+     * Set the default instance name.
+     *
+     * @param  string  $name
+     * @return void
+     */
+    public function setDefaultInstance($name)
+    {
+        $this->defaultInstance = $name;
+    }
+
+    /**
+     * Get the instance specific configuration.
+     *
+     * @param  string  $name
+     * @return array
+     */
+    public function getInstanceConfig($name)
+    {
+        return $this->app['config']->get("phonable.services.{$name}");
     }
 
     /**
      * Create an instance of the Prelude driver.
      */
-    public function createPreludeDriver(): Prelude
+    public function createPreludeDriver(array $config): Prelude
     {
         return new Prelude(
-            $this->config['phonable.services.prelude.key'],
-            $this->config['phonable.services.prelude.customer_uuid'],
-            $this->getContainer()->make('request')->ip(),
+            $config['key'], $config['customer_uuid'], $this->app['request']->ip(),
         );
     }
 
     /**
      * Create an instance of the Vonage driver.
      */
-    public function createVonageDriver(): Vonage
+    public function createVonageDriver(array $config): Vonage
     {
-        return new Vonage($this->getContainer()->make(Client::class));
+        return new Vonage($this->app->make(Client::class));
     }
 }

@@ -4,33 +4,29 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Default Identification Driver
+    | Default Identification Service
     |--------------------------------------------------------------------------
     |
-    | This option controls the default identification driver when using this
-    | feature. You can swap this driver on the fly if required.
+    | This option controls the default identification service when using this
+    | feature. You can swap this service on the fly if required.
     |
-    | Supported drivers: "prelude", "vonage"
+    | Supported services: "prelude", "vonage"
     |
     */
-    'identification' => [
-        'default' => env('PHONE_IDENTIFICATION_SERVICE', 'prelude'),
-    ],
+    'identification_service' => env('PHONE_IDENTIFICATION_SERVICE', 'prelude'),
 
     /*
     |--------------------------------------------------------------------------
-    | Default Verification Driver
+    | Default Verification Service
     |--------------------------------------------------------------------------
     |
-    | This option controls the default verification driver when using this
-    | feature. You can swap this driver on the fly if required.
+    | This option controls the default verification service when using this
+    | feature. You can swap this service on the fly if required.
     |
-    | Supported drivers: "prelude", "twilio", "vonage"
+    | Supported services: "prelude", "twilio", "vonage"
     |
     */
-    'verification' => [
-        'default' => env('PHONE_VERIFICATION_SERVICE', 'prelude'),
-    ],
+    'verification_service' => env('PHONE_VERIFICATION_SERVICE', 'prelude'),
 
     /*
     |--------------------------------------------------------------------------
@@ -46,17 +42,20 @@ return [
     'services' => [
 
         'prelude' => [
+            'driver' => 'prelude',
             'key' => env('PRELUDE_KEY'),
             'customer_uuid' => env('PRELUDE_CUSTOMER_UUID'),
         ],
 
         'twilio' => [
+            'driver' => 'twilio',
             'account_id' => env('TWILIO_ACCOUNT_ID'),
             'auth_token' => env('TWILIO_AUTH_TOKEN'),
             'service_sid' => env('TWILIO_SERVICE_SID'),
         ],
 
         'vonage' => [
+            'driver' => 'vonage',
             // See https://github.com/laravel/vonage-notification-channel for Vonage configuration
         ],
 
