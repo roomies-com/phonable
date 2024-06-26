@@ -2,50 +2,64 @@
 
 namespace Roomies\Phonable\Verification;
 
-use Illuminate\Support\Manager as BaseManager;
+use Illuminate\Support\MultipleInstanceManager;
 
-class Manager extends BaseManager
+class Manager extends MultipleInstanceManager
 {
+    /**
+     * The name of the default instance.
+     */
+    protected ?string $defaultInstance;
+
     /**
      * Get the default driver name.
      */
-    public function getDefaultDriver(): string
+    public function getDefaultInstance(): string
     {
-        return $this->config['phonable.verification.default'];
+        return $this->defaultInstance ?? $this->config['phonable.verification_service'];
+    }
+
+    /**
+     * Set the default instance name.
+     */
+    public function setDefaultInstance(string $name): void
+    {
+        $this->defaultInstance = $name;
+    }
+
+    /**
+     * Get the instance specific configuration.
+     */
+    public function getInstanceConfig(string $name): array
+    {
+        return config("phonable.services.{$name}");
     }
 
     /**
      * Create an instance of the Prelude driver.
      */
-    public function createPreludeDriver(): Prelude
+    public function createPreludeDriver(array $config): Prelude
     {
         return new Prelude(
-            $this->config['phonable.services.prelude.key'],
-            $this->config['phonable.services.prelude.customer_uuid'],
-            $this->getContainer()->make('request')->ip(),
+            $config['key'], $config['customer_uuid'], $this->app->make('request')->ip(),
         );
     }
 
     /**
      * Create an instance of the Twilio driver.
      */
-    public function createTwilioDriver(): Twilio
+    public function createTwilioDriver(array $config): Twilio
     {
         return new Twilio(
-            $this->config['phonable.services.twilio.account_sid'],
-            $this->config['phonable.services.twilio.auth_token'],
-            $this->config['phonable.services.twilio.service_sid']
+            $config['account_sid'], $config['auth_token'], $config['service_sid']
         );
     }
 
     /**
      * Create an instance of the Vonage driver.
      */
-    public function createVonageDriver(): Vonage
+    public function createVonageDriver(array $config): Vonage
     {
-        return new Vonage(
-            $this->config['phonable.services.vonage.key'],
-            $this->config['phonable.services.vonage.secret']
-        );
+        return new Vonage($config['key'], $config['secret']);
     }
 }
