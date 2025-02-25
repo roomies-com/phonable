@@ -13,7 +13,7 @@ class IdentificationFakeTest extends TestCase
 
     public IdentificationFake $fake;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->identifiable = new Identifiable;
     }
@@ -31,7 +31,7 @@ class IdentificationFakeTest extends TestCase
 
     public function test_faking_verification_without_result()
     {
-        $fake = new IdentificationFake();
+        $fake = new IdentificationFake;
 
         $result = $fake->get($this->identifiable);
 
