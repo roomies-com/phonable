@@ -14,7 +14,7 @@ class VerificationFakeTest extends TestCase
 
     public VerificationFake $fake;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->verifiable = new Verifiable;
     }
