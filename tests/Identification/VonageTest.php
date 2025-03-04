@@ -91,6 +91,39 @@ class VonageTest extends TestCase
         $this->assertNull($result->callerName);
     }
 
+    public function test_it_falls_back_to_original_carrier_if_current_carrier_empty()
+    {
+        $identifiable = new Identifiable(
+            phoneNumber: '+12125550000',
+        );
+
+        $standardCnam = new StandardCnam($identifiable->getIdentifiablePhoneNumber());
+        $standardCnam->fromArray([
+            'current_carrier' => [
+                'name' => null,
+                'country' => null,
+                'network_type' => null,
+            ],
+            'original_carrier' => [
+                'name' => 'Verizon Wireless',
+                'country' => 'US',
+                'network_type' => 'mobile',
+            ],
+            'caller_name' => 'Thomas Clement',
+        ]);
+
+        $this->mockResponse(function ($insights) use ($identifiable, $standardCnam) {
+            $insights->shouldReceive('standardCnam')
+                ->with($identifiable->getIdentifiablePhoneNumber())
+                ->andReturn($standardCnam);
+        });
+
+        $result = app(Vonage::class)->get($identifiable);
+
+        $this->assertEquals('Verizon Wireless', $result->carrierName);
+        $this->assertEquals('Thomas Clement', $result->callerName);
+    }
+
     public function test_it_handles_failure()
     {
         $identifiable = new Identifiable;

@@ -8,6 +8,7 @@ use Roomies\Phonable\Contracts\IdentifiesPhoneNumbers;
 use Roomies\Phonable\Contracts\PhoneIdentifiable;
 use Vonage\Client;
 use Vonage\Client\Exception\Request as RequestException;
+use Vonage\Insights\Standard;
 use Vonage\Insights\StandardCnam;
 
 class Vonage implements IdentifiesPhoneNumbers
@@ -40,7 +41,7 @@ class Vonage implements IdentifiesPhoneNumbers
             return null;
         }
 
-        $carrier = $insight->getCurrentCarrier();
+        $carrier = $this->getCarrier($insight);
 
         return new IdentificationResult(
             carrierName: Arr::get($carrier, 'name'),
@@ -50,5 +51,19 @@ class Vonage implements IdentifiesPhoneNumbers
             callerType: $insight instanceof StandardCnam ? $insight->getCallerType() : null,
             data: $insight,
         );
+    }
+
+    /**
+     * Return the current carrier, or original carrier if unavailable.
+     */
+    protected function getCarrier(Standard $insight): array
+    {
+        $currentCarrier = $insight->getCurrentCarrier();
+
+        if (count(array_filter($currentCarrier)) === 0) {
+            return $insight->getOriginalCarrier();
+        }
+
+        return $currentCarrier;
     }
 }
