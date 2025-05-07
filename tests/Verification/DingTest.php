@@ -4,12 +4,12 @@ namespace Roomies\Phonable\Tests\Verification;
 
 use Illuminate\Support\Facades\Http;
 use Roomies\Phonable\Tests\TestCase;
-use Roomies\Phonable\Verification\Prelude;
+use Roomies\Phonable\Verification\Ding;
 use Roomies\Phonable\Verification\VerificationResult;
 
-class PreludeTest extends TestCase
+class DingTest extends TestCase
 {
-    public function test_send_creates_verification_request()
+    public function test_send_creates_verification_request(): void
     {
         Http::fake([
             'api.ding.live/v1/authentication' => Http::response([
@@ -17,13 +17,13 @@ class PreludeTest extends TestCase
             ], 200),
         ]);
 
-        $result = app(Prelude::class)->send('+12125550000');
+        $result = app(Ding::class)->send('+12125550000');
 
         $this->assertEquals('abc-123', $result->id);
         $this->assertEquals('+12125550000', $result->phoneNumber);
     }
 
-    public function test_send_creates_verification_request_with_verifiable()
+    public function test_send_creates_verification_request_with_verifiable(): void
     {
         Http::fake([
             'api.ding.live/v1/authentication' => Http::response([
@@ -33,13 +33,13 @@ class PreludeTest extends TestCase
 
         $verifiable = new Verifiable;
 
-        $result = app(Prelude::class)->send($verifiable);
+        $result = app(Ding::class)->send($verifiable);
 
         $this->assertEquals('abc-123', $result->id);
         $this->assertEquals($verifiable->getVerifiablePhoneNumber(), $result->phoneNumber);
     }
 
-    public function test_verify_returns_for_valid_code()
+    public function test_verify_returns_for_valid_code(): void
     {
         Http::fake([
             'api.ding.live/v1/check' => Http::response([
@@ -47,12 +47,12 @@ class PreludeTest extends TestCase
             ], 200),
         ]);
 
-        $result = app(Prelude::class)->verify('request-id', '1234');
+        $result = app(Ding::class)->verify('request-id', '1234');
 
         $this->assertEquals(VerificationResult::Successful, $result);
     }
 
-    public function test_verify_returns_for_valid_code_with_verifiable()
+    public function test_verify_returns_for_valid_code_with_verifiable(): void
     {
         Http::fake([
             'api.ding.live/v1/check' => Http::response([
@@ -62,12 +62,12 @@ class PreludeTest extends TestCase
 
         $verifiable = new Verifiable(sessionId: 'request-id');
 
-        $result = app(Prelude::class)->verify($verifiable, '1234');
+        $result = app(Ding::class)->verify($verifiable, '1234');
 
         $this->assertEquals(VerificationResult::Successful, $result);
     }
 
-    public function test_verify_returns_for_already_valid_code()
+    public function test_verify_returns_for_already_valid_code(): void
     {
         Http::fake([
             'api.ding.live/v1/check' => Http::response([
@@ -75,12 +75,12 @@ class PreludeTest extends TestCase
             ], 200),
         ]);
 
-        $result = app(Prelude::class)->verify('request-id', '1234');
+        $result = app(Ding::class)->verify('request-id', '1234');
 
         $this->assertEquals(VerificationResult::Successful, $result);
     }
 
-    public function test_verify_returns_for_expired_code()
+    public function test_verify_returns_for_expired_code(): void
     {
         Http::fake([
             'api.ding.live/v1/check' => Http::response([
@@ -88,12 +88,12 @@ class PreludeTest extends TestCase
             ], 200),
         ]);
 
-        $result = app(Prelude::class)->verify('request-id', '1234');
+        $result = app(Ding::class)->verify('request-id', '1234');
 
         $this->assertEquals(VerificationResult::Expired, $result);
     }
 
-    public function test_verify_returns_for_missing_code()
+    public function test_verify_returns_for_missing_code(): void
     {
         Http::fake([
             'api.ding.live/v1/check' => Http::response([
@@ -101,12 +101,12 @@ class PreludeTest extends TestCase
             ], 200),
         ]);
 
-        $result = app(Prelude::class)->verify('request-id', '5678');
+        $result = app(Ding::class)->verify('request-id', '5678');
 
         $this->assertEquals(VerificationResult::NotFound, $result);
     }
 
-    public function test_verify_returns_for_invalid_code()
+    public function test_verify_returns_for_invalid_code(): void
     {
         Http::fake([
             'api.ding.live/v1/check' => Http::response([
@@ -114,7 +114,7 @@ class PreludeTest extends TestCase
             ], 200),
         ]);
 
-        $result = app(Prelude::class)->verify('request-id', '5678');
+        $result = app(Ding::class)->verify('request-id', '5678');
 
         $this->assertEquals(VerificationResult::Invalid, $result);
     }

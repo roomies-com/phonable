@@ -9,7 +9,7 @@ use Roomies\Phonable\Verification\Vonage;
 
 class VonageTest extends TestCase
 {
-    public function test_send_creates_verification_request()
+    public function test_send_creates_verification_request(): void
     {
         Http::fake([
             'api.nexmo.com/v2/verify' => Http::response([
@@ -23,7 +23,7 @@ class VonageTest extends TestCase
         $this->assertEquals('+12125550000', $result->phoneNumber);
     }
 
-    public function test_send_creates_verification_request_with_verifiable()
+    public function test_send_creates_verification_request_with_verifiable(): void
     {
         Http::fake([
             'api.nexmo.com/v2/verify' => Http::response([
@@ -39,7 +39,7 @@ class VonageTest extends TestCase
         $this->assertEquals($verifiable->getVerifiablePhoneNumber(), $result->phoneNumber);
     }
 
-    public function test_verify_returns_for_valid_code()
+    public function test_verify_returns_for_valid_code(): void
     {
         Http::fake([
             'api.nexmo.com/v2/verify/request-id' => Http::response([], 200),
@@ -50,7 +50,7 @@ class VonageTest extends TestCase
         $this->assertEquals(VerificationResult::Successful, $result);
     }
 
-    public function test_verify_returns_for_valid_code_with_verifiable()
+    public function test_verify_returns_for_valid_code_with_verifiable(): void
     {
         Http::fake([
             'api.nexmo.com/v2/verify/request-id' => Http::response([], 200),
@@ -63,7 +63,7 @@ class VonageTest extends TestCase
         $this->assertEquals(VerificationResult::Successful, $result);
     }
 
-    public function test_verify_returns_for_expired_valid_code()
+    public function test_verify_returns_for_expired_valid_code(): void
     {
         Http::fake([
             'api.nexmo.com/v2/verify/request-id' => Http::response([], 410),
@@ -74,7 +74,7 @@ class VonageTest extends TestCase
         $this->assertEquals(VerificationResult::Expired, $result);
     }
 
-    public function test_verify_returns_for_missing_code()
+    public function test_verify_returns_for_missing_code(): void
     {
         Http::fake([
             'api.nexmo.com/v2/verify/request-id' => Http::response([], 404),
@@ -85,7 +85,7 @@ class VonageTest extends TestCase
         $this->assertEquals(VerificationResult::NotFound, $result);
     }
 
-    public function test_verify_returns_for_invalid_code()
+    public function test_verify_returns_for_invalid_code(): void
     {
         Http::fake([
             'api.nexmo.com/v2/verify/request-id' => Http::response([], 400),

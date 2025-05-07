@@ -8,7 +8,7 @@ use Roomies\Phonable\Contracts\IdentifiesPhoneNumbers;
 use Roomies\Phonable\Contracts\PhoneIdentifiable;
 use SensitiveParameter;
 
-class Prelude implements IdentifiesPhoneNumbers
+class Ding implements IdentifiesPhoneNumbers
 {
     /**
      * The authenticated HTTP client.
@@ -16,15 +16,16 @@ class Prelude implements IdentifiesPhoneNumbers
     protected PendingRequest $client;
 
     /**
-     * Create a new Prelude instance.
+     * Create a new Ding instance.
      */
     public function __construct(
-        #[SensitiveParameter] protected string $key = '',
+        #[SensitiveParameter] protected string $apiKey = '',
+        protected string $customerUuid = '',
         protected string $ipAddress = '',
     ) {
-        $this->client = Http::baseUrl('https://api.prelude.dev/v2')
-            ->withHeader('Accept', 'application/json')
-            ->withToken($key);
+        $this->client = Http::baseUrl('https://api.ding.live/v1')
+            ->withHeader('x-api-key', $apiKey)
+            ->withHeader('customer-uuid', $customerUuid);
     }
 
     /**
@@ -43,7 +44,7 @@ class Prelude implements IdentifiesPhoneNumbers
         }
 
         return new IdentificationResult(
-            carrierName: $response->json('network_info.carrier_name'),
+            carrierName: $response->json('carrier'),
             carrierCountry: $response->json('country_code'),
             networkType: $response->json('line_type'),
             data: $response->json(),

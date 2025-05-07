@@ -8,7 +8,7 @@ use Roomies\Phonable\Tests\TestCase;
 
 class VerificationTest extends TestCase
 {
-    public function test_it_returns_instance_of_fake()
+    public function test_it_returns_instance_of_fake(): void
     {
         $result = Verification::fake();
 

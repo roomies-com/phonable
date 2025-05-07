@@ -19,7 +19,7 @@ class VerificationFakeTest extends TestCase
         $this->verifiable = new Verifiable;
     }
 
-    public function test_assert_sent_to()
+    public function test_assert_sent_to(): void
     {
         $fake = new VerificationFake;
 
@@ -35,7 +35,7 @@ class VerificationFakeTest extends TestCase
         $fake->assertSentTo($this->verifiable);
     }
 
-    public function test_assert_not_sent_to()
+    public function test_assert_not_sent_to(): void
     {
         $fake = new VerificationFake;
 
@@ -51,7 +51,7 @@ class VerificationFakeTest extends TestCase
         }
     }
 
-    public function test_assert_nothing_sent()
+    public function test_assert_nothing_sent(): void
     {
         $fake = new VerificationFake;
 
@@ -67,7 +67,7 @@ class VerificationFakeTest extends TestCase
         }
     }
 
-    public function test_faking_successful_verification()
+    public function test_faking_successful_verification(): void
     {
         $fake = new VerificationFake([
             '+12125550000' => VerificationResult::Successful,
@@ -78,7 +78,7 @@ class VerificationFakeTest extends TestCase
         $this->assertEquals(VerificationResult::Successful, $result);
     }
 
-    public function test_faking_expired_verification()
+    public function test_faking_expired_verification(): void
     {
         $fake = new VerificationFake([
             '+12125550000' => VerificationResult::Expired,
@@ -89,7 +89,7 @@ class VerificationFakeTest extends TestCase
         $this->assertEquals(VerificationResult::Expired, $result);
     }
 
-    public function test_faking_verification_without_result()
+    public function test_faking_verification_without_result(): void
     {
         $fake = new VerificationFake;
 

@@ -18,7 +18,7 @@ class IdentificationFakeTest extends TestCase
         $this->identifiable = new Identifiable;
     }
 
-    public function test_faking_successful_verification()
+    public function test_faking_successful_verification(): void
     {
         $fake = new IdentificationFake([
             '+12125550000' => new IdentificationResult,
@@ -29,7 +29,7 @@ class IdentificationFakeTest extends TestCase
         $this->assertInstanceOf(IdentificationResult::class, $result);
     }
 
-    public function test_faking_verification_without_result()
+    public function test_faking_verification_without_result(): void
     {
         $fake = new IdentificationFake;
 
