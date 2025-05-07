@@ -8,7 +8,7 @@ use Roomies\Phonable\Tests\TestCase;
 
 class DingTest extends TestCase
 {
-    public function test_it_handles_string()
+    public function test_it_handles_string(): void
     {
         Http::fake([
             'api.ding.live/v1/lookup/+12125550000' => Http::response([
@@ -25,7 +25,7 @@ class DingTest extends TestCase
         $this->assertEquals('network_type', $result->networkType);
     }
 
-    public function test_it_handle_us_number()
+    public function test_it_handle_us_number(): void
     {
         $identifiable = new Identifiable(
             phoneNumber: '+12125550000',
@@ -46,7 +46,7 @@ class DingTest extends TestCase
         $this->assertEquals('network_type', $result->networkType);
     }
 
-    public function test_it_handles_failure()
+    public function test_it_handles_failure(): void
     {
         $identifiable = new Identifiable;
 

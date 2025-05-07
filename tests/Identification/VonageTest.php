@@ -12,7 +12,7 @@ use Vonage\Insights\StandardCnam;
 
 class VonageTest extends TestCase
 {
-    public function test_it_handles_string()
+    public function test_it_handles_string(): void
     {
         $phoneNumber = '+12125550000';
 
@@ -38,7 +38,7 @@ class VonageTest extends TestCase
         $this->assertEquals('Thomas Clement', $result->callerName);
     }
 
-    public function test_it_handle_us_number()
+    public function test_it_handle_us_number(): void
     {
         $identifiable = new Identifiable(
             phoneNumber: '+12125550000',
@@ -66,7 +66,7 @@ class VonageTest extends TestCase
         $this->assertEquals('Thomas Clement', $result->callerName);
     }
 
-    public function test_it_handles_non_us_number()
+    public function test_it_handles_non_us_number(): void
     {
         $identifiable = new Identifiable(
             phoneNumber: '+61409181900',
@@ -91,7 +91,7 @@ class VonageTest extends TestCase
         $this->assertNull($result->callerName);
     }
 
-    public function test_it_falls_back_to_original_carrier_if_current_carrier_empty()
+    public function test_it_falls_back_to_original_carrier_if_current_carrier_empty(): void
     {
         $identifiable = new Identifiable(
             phoneNumber: '+12125550000',
@@ -124,7 +124,7 @@ class VonageTest extends TestCase
         $this->assertEquals('Thomas Clement', $result->callerName);
     }
 
-    public function test_it_handles_failure()
+    public function test_it_handles_failure(): void
     {
         $identifiable = new Identifiable;
 
@@ -139,7 +139,7 @@ class VonageTest extends TestCase
         $this->assertNull($result);
     }
 
-    protected function mockResponse(callable $callback)
+    protected function mockResponse(callable $callback): void
     {
         $insights = Mockery::mock('stdClass', $callback);
 

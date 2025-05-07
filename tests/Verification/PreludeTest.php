@@ -9,7 +9,7 @@ use Roomies\Phonable\Verification\VerificationResult;
 
 class PreludeTest extends TestCase
 {
-    public function test_send_creates_verification_request()
+    public function test_send_creates_verification_request(): void
     {
         Http::fake([
             'api.prelude.dev/v2/verification' => Http::response([
@@ -23,7 +23,7 @@ class PreludeTest extends TestCase
         $this->assertEquals('+12125550000', $result->phoneNumber);
     }
 
-    public function test_send_creates_verification_request_with_verifiable()
+    public function test_send_creates_verification_request_with_verifiable(): void
     {
         Http::fake([
             'api.prelude.dev/v2/verification' => Http::response([
@@ -39,7 +39,7 @@ class PreludeTest extends TestCase
         $this->assertEquals($verifiable->getVerifiablePhoneNumber(), $result->phoneNumber);
     }
 
-    public function test_verify_returns_for_valid_code()
+    public function test_verify_returns_for_valid_code(): void
     {
         Http::fake([
             'api.prelude.dev/v2/verification/check' => Http::response([
@@ -52,7 +52,7 @@ class PreludeTest extends TestCase
         $this->assertEquals(VerificationResult::Successful, $result);
     }
 
-    public function test_verify_returns_for_valid_code_with_verifiable()
+    public function test_verify_returns_for_valid_code_with_verifiable(): void
     {
         Http::fake([
             'api.prelude.dev/v2/verification/check' => Http::response([
@@ -65,7 +65,7 @@ class PreludeTest extends TestCase
         $this->assertEquals(VerificationResult::Successful, $result);
     }
 
-    public function test_verify_returns_for_already_valid_code()
+    public function test_verify_returns_for_already_valid_code(): void
     {
         Http::fake([
             'api.prelude.dev/v2/verification/check' => Http::response([
@@ -78,7 +78,7 @@ class PreludeTest extends TestCase
         $this->assertEquals(VerificationResult::Successful, $result);
     }
 
-    public function test_verify_returns_for_expired_code()
+    public function test_verify_returns_for_expired_code(): void
     {
         Http::fake([
             'api.prelude.dev/v2/verification/check' => Http::response([
@@ -91,7 +91,7 @@ class PreludeTest extends TestCase
         $this->assertEquals(VerificationResult::Expired, $result);
     }
 
-    public function test_verify_returns_for_invalid_code()
+    public function test_verify_returns_for_invalid_code(): void
     {
         Http::fake([
             'api.prelude.dev/v2/verification/check' => Http::response([
