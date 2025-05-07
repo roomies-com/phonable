@@ -8,7 +8,7 @@ use Roomies\Phonable\Contracts\PhoneVerifiable;
 use Roomies\Phonable\Contracts\VerifiesPhoneNumbers;
 use SensitiveParameter;
 
-class Prelude implements VerifiesPhoneNumbers
+class Ding implements VerifiesPhoneNumbers
 {
     /**
      * The authenticated HTTP client.
@@ -16,15 +16,15 @@ class Prelude implements VerifiesPhoneNumbers
     protected PendingRequest $client;
 
     /**
-     * Create a new Prelude instance.
+     * Create a new Ding instance.
      */
     public function __construct(
-        #[SensitiveParameter] protected string $key = '',
+        #[SensitiveParameter] protected string $apiKey = '',
+        protected string $customerUuid = '',
         protected string $ipAddress = '',
     ) {
-        $this->client = Http::baseUrl('https://api.prelude.dev/v2')
-            ->withHeader('Accept', 'application/json')
-            ->withToken($key);
+        $this->client = Http::baseUrl('https://api.ding.live/v1')
+            ->withHeader('x-api-key', $apiKey);
     }
 
     /**
@@ -35,19 +35,15 @@ class Prelude implements VerifiesPhoneNumbers
         $phoneNumber = $this->getPhoneNumber($verifiable);
 
         $response = $this->client
-            ->post('/verification', [
-                'target' => [
-                    'type' => 'phone_number',
-                    'value' => $phoneNumber,
-                ],
-                'signals' => [
-                    'ip' => $this->ipAddress,
-                    'device_platform' => 'web',
-                ],
+            ->post('/authentication', [
+                'customer_uuid' => $this->customerUuid,
+                'phone_number' => $phoneNumber,
+                'ip' => $this->ipAddress,
+                'device_type' => 'WEB',
             ]);
 
         return new VerificationRequest(
-            id: $response->json('id'),
+            id: $response->json('authentication_uuid'),
             phoneNumber: $phoneNumber,
         );
     }
@@ -57,21 +53,21 @@ class Prelude implements VerifiesPhoneNumbers
      */
     public function verify(string|PhoneVerifiable $verifiable, string $code): VerificationResult
     {
-        $phoneNumber = $this->getPhoneNumber($verifiable);
+        $session = $this->getVerifiableSession($verifiable);
 
         $response = $this->client
-            ->post('/verification/check', [
-                'target' => [
-                    'type' => 'phone_number',
-                    'value' => $phoneNumber,
-                ],
-                'code' => $code,
+            ->post('/check', [
+                'customer_uuid' => $this->customerUuid,
+                'authentication_uuid' => $session,
+                'check_code' => $code,
             ]);
 
         return match ($response->json('status')) {
-            'success' => VerificationResult::Successful,
-            'failure' => VerificationResult::Invalid,
-            'expired_or_not_found' => VerificationResult::Expired,
+            'valid' => VerificationResult::Successful,
+            'already_validated' => VerificationResult::Successful,
+            'invalid' => VerificationResult::Invalid,
+            'without_attempt' => VerificationResult::NotFound,
+            'expired_auth' => VerificationResult::Expired,
             default => VerificationResult::Invalid,
         };
     }
@@ -83,6 +79,16 @@ class Prelude implements VerifiesPhoneNumbers
     {
         return $verifiable instanceof PhoneVerifiable
             ? $verifiable->getVerifiablePhoneNumber()
+            : $verifiable;
+    }
+
+    /**
+     * Get the phone verification session off a PhoneVerifiable instance if provided.
+     */
+    protected function getVerifiableSession(string|PhoneVerifiable $verifiable): ?string
+    {
+        return $verifiable instanceof PhoneVerifiable
+            ? $verifiable->getVerifiableSession()
             : $verifiable;
     }
 }

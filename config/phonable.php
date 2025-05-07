@@ -41,10 +41,15 @@ return [
     */
     'services' => [
 
+        'ding' => [
+            'driver' => 'ding',
+            'key' => env('DING_KEY'),
+            'customer_uuid' => env('DING_CUSTOMER_UUID'),
+        ],
+
         'prelude' => [
             'driver' => 'prelude',
             'key' => env('PRELUDE_KEY'),
-            'customer_uuid' => env('PRELUDE_CUSTOMER_UUID'),
         ],
 
         'twilio' => [

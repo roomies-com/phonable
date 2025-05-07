@@ -3,10 +3,10 @@
 namespace Roomies\Phonable\Tests\Identification;
 
 use Illuminate\Support\Facades\Http;
-use Roomies\Phonable\Identification\Prelude;
+use Roomies\Phonable\Identification\Ding;
 use Roomies\Phonable\Tests\TestCase;
 
-class PreludeTest extends TestCase
+class DingTest extends TestCase
 {
     public function test_it_handles_string()
     {
@@ -18,7 +18,7 @@ class PreludeTest extends TestCase
             ], 200, ['content-type' => 'application/json']),
         ]);
 
-        $result = app(Prelude::class)->get('+12125550000');
+        $result = app(Ding::class)->get('+12125550000');
 
         $this->assertEquals('carrier_name', $result->carrierName);
         $this->assertEquals('carrier_country', $result->carrierCountry);
@@ -39,7 +39,7 @@ class PreludeTest extends TestCase
             ], 200, ['content-type' => 'application/json']),
         ]);
 
-        $result = app(Prelude::class)->get($identifiable);
+        $result = app(Ding::class)->get($identifiable);
 
         $this->assertEquals('carrier_name', $result->carrierName);
         $this->assertEquals('carrier_country', $result->carrierCountry);
@@ -54,17 +54,8 @@ class PreludeTest extends TestCase
             'api.ding.live/v1/lookup/+12125550000' => Http::response(null, 404),
         ]);
 
-        $result = app(Prelude::class)->get($identifiable);
+        $result = app(Ding::class)->get($identifiable);
 
         $this->assertNull($result);
-    }
-
-    protected function mockResponse(callable $callback)
-    {
-        $insights = Mockery::mock('stdClass', $callback);
-
-        $this->mock(Client::class, function ($mock) use ($insights) {
-            $mock->shouldReceive('insights')->andReturn($insights);
-        });
     }
 }
