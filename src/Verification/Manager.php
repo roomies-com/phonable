@@ -3,9 +3,12 @@
 namespace Roomies\Phonable\Verification;
 
 use Illuminate\Support\MultipleInstanceManager;
+use Roomies\Phonable\InteractsWithRequest;
 
 class Manager extends MultipleInstanceManager
 {
+    use InteractsWithRequest;
+
     /**
      * The name of the default instance.
      */
@@ -50,7 +53,7 @@ class Manager extends MultipleInstanceManager
     public function createDingDriver(array $config): Ding
     {
         return new Ding(
-            $config['key'], $config['customer_uuid'], $this->app['request']->ip(),
+            $config['key'], $config['customer_uuid'], $this->getIpAddress(),
         );
     }
 
@@ -60,7 +63,7 @@ class Manager extends MultipleInstanceManager
     public function createPreludeDriver(array $config): Prelude
     {
         return new Prelude(
-            $config['key'], $this->app['request']->ip(),
+            $config['key'], $this->getIpAddress(),
         );
     }
 
