@@ -4,7 +4,7 @@
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/roomies-com/phonable/test.yml?branch=main&label=tests&style=flat-square)](https://github.com/roomies-com/phonable/actions?query=workflow%3Atest+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/roomies/phonable.svg?style=flat-square)](https://packagist.org/packages/roomies/phonable)
 
-Roomies Phonable provides an abstraction layer to identify and verify phone numbers in your Laravel app. Phone verification can be used to help identify legitmate users of your app and also serve as a way to handle 2-factor authentication. Phonable provides implementations for a number of phone services including [Prelude](https://prelude.so) (previously Ding), [Twilio](https://www.twilio.com), and [Vonage](https://vonage.com).
+Roomies Phonable provides an abstraction layer to identify and verify phone numbers in your Laravel app. Phone verification can be used to help identify legitmate users of your app and also serve as a way to handle 2-factor authentication. Phonable provides implementations for a number of phone services including [Prelude](https://prelude.so) [Twilio](https://www.twilio.com), and [Vonage](https://vonage.com).
 
 ## Installation
 

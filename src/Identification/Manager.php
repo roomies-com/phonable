@@ -51,16 +51,6 @@ class Manager extends MultipleInstanceManager
     /**
      * Create an instance of the Prelude driver.
      */
-    public function createDingDriver(array $config): Ding
-    {
-        return new Ding(
-            $config['key'], $config['customer_uuid'], $this->getIpAddress(),
-        );
-    }
-
-    /**
-     * Create an instance of the Prelude driver.
-     */
     public function createPreludeDriver(array $config): Prelude
     {
         return new Prelude(
