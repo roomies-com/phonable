@@ -5,6 +5,7 @@ namespace Roomies\Phonable\Tests\Verification;
 use Illuminate\Support\Facades\Http;
 use Roomies\Phonable\Tests\TestCase;
 use Roomies\Phonable\Verification\Prelude;
+use Roomies\Phonable\Verification\VerificationRequestStatus;
 use Roomies\Phonable\Verification\VerificationResult;
 
 class PreludeTest extends TestCase
@@ -14,6 +15,7 @@ class PreludeTest extends TestCase
         Http::fake([
             'api.prelude.dev/v2/verification' => Http::response([
                 'id' => 'abc-123',
+                'status' => 'success',
             ], 200),
         ]);
 
@@ -21,6 +23,7 @@ class PreludeTest extends TestCase
 
         $this->assertEquals('abc-123', $result->id);
         $this->assertEquals('+12125550000', $result->phoneNumber);
+        $this->assertEquals(VerificationRequestStatus::Successful, $result->status);
     }
 
     public function test_send_creates_verification_request_with_verifiable(): void
@@ -28,6 +31,7 @@ class PreludeTest extends TestCase
         Http::fake([
             'api.prelude.dev/v2/verification' => Http::response([
                 'id' => 'abc-123',
+                'status' => 'success',
             ], 200),
         ]);
 
@@ -37,6 +41,25 @@ class PreludeTest extends TestCase
 
         $this->assertEquals('abc-123', $result->id);
         $this->assertEquals($verifiable->getVerifiablePhoneNumber(), $result->phoneNumber);
+        $this->assertEquals(VerificationRequestStatus::Successful, $result->status);
+    }
+
+    public function test_send_creates_verification_request_with_blocked_verifiable(): void
+    {
+        Http::fake([
+            'api.prelude.dev/v2/verification' => Http::response([
+                'id' => 'abc-123',
+                'status' => 'blocked',
+            ], 200),
+        ]);
+
+        $verifiable = new Verifiable;
+
+        $result = app(Prelude::class)->send($verifiable);
+
+        $this->assertEquals('abc-123', $result->id);
+        $this->assertEquals($verifiable->getVerifiablePhoneNumber(), $result->phoneNumber);
+        $this->assertEquals(VerificationRequestStatus::Blocked, $result->status);
     }
 
     public function test_verify_returns_for_valid_code(): void

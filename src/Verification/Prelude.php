@@ -48,9 +48,15 @@ class Prelude implements VerifiesPhoneNumbers
                 ],
             ]);
 
+        $status = $response->json('status') === 'blocked'
+            ? VerificationRequestStatus::Blocked
+            : VerificationRequestStatus::Successful;
+
         return new VerificationRequest(
             id: $response->json('id'),
             phoneNumber: $phoneNumber,
+            status: $status,
+            raw: $response
         );
     }
 

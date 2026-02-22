@@ -7,8 +7,12 @@ readonly class VerificationRequest
     /**
      * Create a new verification request instance.
      */
-    public function __construct(public mixed $id, public string $phoneNumber)
-    {
+    public function __construct(
+        public mixed $id,
+        public string $phoneNumber,
+        public VerificationRequestStatus $status,
+        public mixed $raw = null,
+    ) {
         //
     }
 }

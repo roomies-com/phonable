@@ -41,9 +41,16 @@ class Twilio implements VerifiesPhoneNumbers
                 'Channel' => 'sms',
             ]);
 
+        $status = match ($response->json('status')) {
+            'canceled', 'max_attempts_reached', 'failed' => VerificationRequestStatus::Failed,
+            default => VerificationRequestStatus::Successful,
+        };
+
         return new VerificationRequest(
             id: $response->json('sid'),
             phoneNumber: $phoneNumber,
+            status: $status,
+            raw: $response,
         );
     }
 

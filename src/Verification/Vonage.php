@@ -52,6 +52,8 @@ class Vonage implements VerifiesPhoneNumbers
         return new VerificationRequest(
             id: $response->json('request_id'),
             phoneNumber: $phoneNumber,
+            status: VerificationRequestStatus::Successful,
+            raw: $response,
         );
     }
 
