@@ -8,6 +8,7 @@ use PHPUnit\Framework\Assert as PHPUnit;
 use Roomies\Phonable\Contracts\PhoneVerifiable;
 use Roomies\Phonable\Contracts\VerifiesPhoneNumbers;
 use Roomies\Phonable\Verification\VerificationRequest;
+use Roomies\Phonable\Verification\VerificationRequestStatus;
 use Roomies\Phonable\Verification\VerificationResult;
 
 class VerificationFake implements Fake, VerifiesPhoneNumbers
@@ -48,6 +49,7 @@ class VerificationFake implements Fake, VerifiesPhoneNumbers
         $request = new VerificationRequest(
             id: Str::random(),
             phoneNumber: $verifiable->getVerifiablePhoneNumber(),
+            status: VerificationRequestStatus::Successful,
         );
 
         return $this->requests[$verifiable->getVerifiablePhoneNumber()] = $request;

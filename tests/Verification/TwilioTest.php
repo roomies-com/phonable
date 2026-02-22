@@ -5,6 +5,7 @@ namespace Roomies\Phonable\Tests\Verification;
 use Illuminate\Support\Facades\Http;
 use Roomies\Phonable\Tests\TestCase;
 use Roomies\Phonable\Verification\Twilio;
+use Roomies\Phonable\Verification\VerificationRequestStatus;
 use Roomies\Phonable\Verification\VerificationResult;
 
 class TwilioTest extends TestCase
@@ -14,6 +15,7 @@ class TwilioTest extends TestCase
         Http::fake([
             'verify.twilio.com/v2/Services/service_sid/Verifications' => Http::response([
                 'sid' => 'abc-123',
+                'status' => 'pending',
             ], 200),
         ]);
 
@@ -21,6 +23,7 @@ class TwilioTest extends TestCase
 
         $this->assertEquals('abc-123', $result->id);
         $this->assertEquals('+12125550000', $result->phoneNumber);
+        $this->assertEquals(VerificationRequestStatus::Successful, $result->status);
     }
 
     public function test_send_creates_verification_request_with_verifiable(): void
@@ -28,6 +31,7 @@ class TwilioTest extends TestCase
         Http::fake([
             'verify.twilio.com/v2/Services/service_sid/Verifications' => Http::response([
                 'sid' => 'abc-123',
+                'status' => 'pending',
             ], 200),
         ]);
 
@@ -37,6 +41,25 @@ class TwilioTest extends TestCase
 
         $this->assertEquals('abc-123', $result->id);
         $this->assertEquals($verifiable->getVerifiablePhoneNumber(), $result->phoneNumber);
+        $this->assertEquals(VerificationRequestStatus::Successful, $result->status);
+    }
+
+    public function test_send_creates_verification_request_with_failed_verifiable(): void
+    {
+        Http::fake([
+            'verify.twilio.com/v2/Services/service_sid/Verifications' => Http::response([
+                'sid' => 'abc-123',
+                'status' => 'canceled',
+            ], 200),
+        ]);
+
+        $verifiable = new Verifiable;
+
+        $result = $this->getTwilio()->send($verifiable);
+
+        $this->assertEquals('abc-123', $result->id);
+        $this->assertEquals($verifiable->getVerifiablePhoneNumber(), $result->phoneNumber);
+        $this->assertEquals(VerificationRequestStatus::Failed, $result->status);
     }
 
     public function test_verify_returns_for_valid_code(): void
