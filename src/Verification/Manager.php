@@ -53,7 +53,9 @@ class Manager extends MultipleInstanceManager
     public function createPreludeDriver(array $config): Prelude
     {
         return new Prelude(
-            $config['key'], $this->getIpAddress(),
+            $config['key'],
+            $this->getIpAddress(),
+            $this->getUserAgent(),
         );
     }
 

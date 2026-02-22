@@ -21,6 +21,7 @@ class Prelude implements VerifiesPhoneNumbers
     public function __construct(
         #[SensitiveParameter] protected string $key = '',
         protected string $ipAddress = '',
+        protected string $userAgent = '',
     ) {
         $this->client = Http::baseUrl('https://api.prelude.dev/v2')
             ->withHeader('Accept', 'application/json')
@@ -42,6 +43,7 @@ class Prelude implements VerifiesPhoneNumbers
                 ],
                 'signals' => [
                     'ip' => $this->ipAddress,
+                    'user_agent' => $this->userAgent,
                     'device_platform' => 'web',
                 ],
             ]);
