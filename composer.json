@@ -23,7 +23,7 @@
     "require-dev": {
         "laravel/pint": "^1.0",
         "laravel/vonage-notification-channel": "^3.2",
-        "orchestra/testbench": "^10.0",
+        "orchestra/testbench": "^9.0|^10.0",
         "phpunit/phpunit": "^12.0",
         "vonage/client-core": "^4.1.0"
     },
