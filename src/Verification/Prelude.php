@@ -56,7 +56,7 @@ class Prelude implements VerifiesPhoneNumbers
             id: $response->json('id'),
             phoneNumber: $phoneNumber,
             status: $status,
-            raw: $response
+            raw: $response,
         );
     }
 
