@@ -48,7 +48,7 @@ class Prelude implements VerifiesPhoneNumbers
                 ],
             ]);
 
-        $status = $response->json('status') === 'blocked'
+        $status = $this->isBlocked($response)
             ? VerificationRequestStatus::Blocked
             : VerificationRequestStatus::Successful;
 
@@ -92,5 +92,14 @@ class Prelude implements VerifiesPhoneNumbers
         return $verifiable instanceof PhoneVerifiable
             ? $verifiable->getVerifiablePhoneNumber()
             : $verifiable;
+    }
+
+    /**
+     * Determine if the request was blocked for suspicious reasons.
+     */
+    protected function isBlocked($response): bool
+    {
+        return $response->json('status') === 'blocked'
+            && in_array($response->json('reason'), ['in_block_list', 'suspicious']);
     }
 }

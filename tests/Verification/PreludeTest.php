@@ -50,6 +50,7 @@ class PreludeTest extends TestCase
             'api.prelude.dev/v2/verification' => Http::response([
                 'id' => 'abc-123',
                 'status' => 'blocked',
+                'reason' => 'suspicious',
             ], 200),
         ]);
 
