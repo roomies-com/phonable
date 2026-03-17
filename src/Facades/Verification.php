@@ -5,9 +5,10 @@ namespace Roomies\Phonable\Facades;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Facade;
 use Roomies\Phonable\Testing\VerificationFake;
+use Roomies\Phonable\Verification\Manager;
 
 /**
- * @see \Roomies\Phonable\Verification\Manager
+ * @see Manager
  */
 class Verification extends Facade
 {
