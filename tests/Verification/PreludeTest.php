@@ -93,6 +93,33 @@ class PreludeTest extends TestCase
         $this->assertEquals(VerificationRequestStatus::Blocked, $result->status);
     }
 
+    public function test_send_treats_a_reused_verification_as_successful(): void
+    {
+        Http::fake([
+            'api.prelude.dev/v2/verification' => Http::response([
+                'id' => 'abc-123',
+                'status' => 'retry',
+            ], 200),
+        ]);
+
+        $result = app(Prelude::class)->send('+12125550000');
+
+        $this->assertEquals(VerificationRequestStatus::Successful, $result->status);
+    }
+
+    public function test_send_returns_failed_when_the_request_errors(): void
+    {
+        Http::fake([
+            'api.prelude.dev/v2/verification' => Http::response([
+                'message' => 'Something went wrong.',
+            ], 500),
+        ]);
+
+        $result = app(Prelude::class)->send('+12125550000');
+
+        $this->assertEquals(VerificationRequestStatus::Failed, $result->status);
+    }
+
     public function test_send_defaults_to_automatic_method(): void
     {
         Http::fake([
