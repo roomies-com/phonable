@@ -67,6 +67,26 @@ class VerificationFakeTest extends TestCase
         }
     }
 
+    public function test_send_accepts_a_string_phone_number(): void
+    {
+        $fake = new VerificationFake;
+
+        $request = $fake->send('+12125550000');
+
+        $this->assertEquals('+12125550000', $request->phoneNumber);
+    }
+
+    public function test_verify_accepts_a_string_phone_number(): void
+    {
+        $fake = new VerificationFake([
+            '+12125550000' => VerificationResult::Successful,
+        ]);
+
+        $result = $fake->verify('+12125550000', 1234);
+
+        $this->assertEquals(VerificationResult::Successful, $result);
+    }
+
     public function test_faking_successful_verification(): void
     {
         $fake = new VerificationFake([
