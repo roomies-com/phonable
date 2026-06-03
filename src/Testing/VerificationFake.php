@@ -49,10 +49,16 @@ class VerificationFake implements Fake, VerifiesPhoneNumbers
     {
         $phoneNumber = $this->getPhoneNumber($verifiable);
 
+        $response = $this->responses[$phoneNumber] ?? null;
+
+        $status = $response instanceof VerificationRequestStatus
+            ? $response
+            : VerificationRequestStatus::Successful;
+
         $request = new VerificationRequest(
             id: Str::random(),
             phoneNumber: $phoneNumber,
-            status: VerificationRequestStatus::Successful,
+            status: $status,
         );
 
         return $this->requests[$phoneNumber] = $request;
@@ -63,8 +69,11 @@ class VerificationFake implements Fake, VerifiesPhoneNumbers
      */
     public function verify(string|PhoneVerifiable $verifiable, string $code): VerificationResult
     {
-        return $this->responses[$this->getPhoneNumber($verifiable)]
-            ?? VerificationResult::NotFound;
+        $response = $this->responses[$this->getPhoneNumber($verifiable)] ?? null;
+
+        return $response instanceof VerificationResult
+            ? $response
+            : VerificationResult::NotFound;
     }
 
     /**
