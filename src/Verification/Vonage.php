@@ -30,7 +30,7 @@ class Vonage implements VerifiesPhoneNumbers
     /**
      * Send the phone number verification code.
      */
-    public function send(string|PhoneVerifiable $verifiable): VerificationRequest
+    public function send(string|PhoneVerifiable $verifiable, VerificationMethod $method = VerificationMethod::Automatic): VerificationRequest
     {
         $phoneNumber = $this->getPhoneNumber($verifiable);
 
@@ -39,7 +39,7 @@ class Vonage implements VerifiesPhoneNumbers
                 'brand' => config('app.name'),
                 'workflow' => [
                     [
-                        'channel' => 'sms',
+                        'channel' => $this->channel($method),
                         'to' => $phoneNumber,
                     ],
                 ],
@@ -82,6 +82,14 @@ class Vonage implements VerifiesPhoneNumbers
         }
 
         return VerificationResult::Successful;
+    }
+
+    /**
+     * Map the verification method to the Vonage channel.
+     */
+    protected function channel(VerificationMethod $method): string
+    {
+        return $method === VerificationMethod::Voice ? 'voice' : 'sms';
     }
 
     /**

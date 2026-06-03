@@ -7,6 +7,7 @@ use Illuminate\Support\Testing\Fakes\Fake;
 use PHPUnit\Framework\Assert as PHPUnit;
 use Roomies\Phonable\Contracts\PhoneVerifiable;
 use Roomies\Phonable\Contracts\VerifiesPhoneNumbers;
+use Roomies\Phonable\Verification\VerificationMethod;
 use Roomies\Phonable\Verification\VerificationRequest;
 use Roomies\Phonable\Verification\VerificationRequestStatus;
 use Roomies\Phonable\Verification\VerificationResult;
@@ -44,7 +45,7 @@ class VerificationFake implements Fake, VerifiesPhoneNumbers
     /**
      * Send the phone number verification code.
      */
-    public function send(string|PhoneVerifiable $verifiable): VerificationRequest
+    public function send(string|PhoneVerifiable $verifiable, VerificationMethod $method = VerificationMethod::Automatic): VerificationRequest
     {
         $request = new VerificationRequest(
             id: Str::random(),
