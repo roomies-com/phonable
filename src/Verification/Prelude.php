@@ -31,7 +31,7 @@ class Prelude implements VerifiesPhoneNumbers
     /**
      * Send the phone number verification code.
      */
-    public function send(string|PhoneVerifiable $verifiable): VerificationRequest
+    public function send(string|PhoneVerifiable $verifiable, VerificationMethod $method = VerificationMethod::Automatic): VerificationRequest
     {
         $phoneNumber = $this->getPhoneNumber($verifiable);
 
@@ -46,16 +46,15 @@ class Prelude implements VerifiesPhoneNumbers
                     'user_agent' => $this->userAgent,
                     'device_platform' => 'web',
                 ],
+                'options' => [
+                    'method' => $this->method($method),
+                ],
             ]);
-
-        $status = $this->isBlocked($response)
-            ? VerificationRequestStatus::Blocked
-            : VerificationRequestStatus::Successful;
 
         return new VerificationRequest(
             id: $response->json('id'),
             phoneNumber: $phoneNumber,
-            status: $status,
+            status: $this->status($response),
             raw: $response,
         );
     }
@@ -95,11 +94,31 @@ class Prelude implements VerifiesPhoneNumbers
     }
 
     /**
-     * Determine if the request was blocked for suspicious reasons.
+     * Map the verification method to the Prelude option.
      */
-    protected function isBlocked($response): bool
+    protected function method(VerificationMethod $method): string
     {
-        return $response->json('status') === 'blocked'
-            && in_array($response->json('reason'), ['in_block_list', 'suspicious']);
+        return match ($method) {
+            VerificationMethod::Voice => 'voice',
+            VerificationMethod::Text => 'message',
+            VerificationMethod::Automatic => 'auto',
+        };
+    }
+
+    /**
+     * Determine the status of the verification request.
+     */
+    protected function status($response): VerificationRequestStatus
+    {
+        if (! in_array($response->json('status'), ['blocked', 'shadow_blocked'])) {
+            return VerificationRequestStatus::Successful;
+        }
+
+        if ($response->json('status') === 'shadow_blocked'
+            || in_array($response->json('reason'), ['in_block_list', 'suspicious'])) {
+            return VerificationRequestStatus::Blocked;
+        }
+
+        return VerificationRequestStatus::Failed;
     }
 }

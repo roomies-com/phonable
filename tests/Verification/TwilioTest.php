@@ -5,6 +5,7 @@ namespace Roomies\Phonable\Tests\Verification;
 use Illuminate\Support\Facades\Http;
 use Roomies\Phonable\Tests\TestCase;
 use Roomies\Phonable\Verification\Twilio;
+use Roomies\Phonable\Verification\VerificationMethod;
 use Roomies\Phonable\Verification\VerificationRequestStatus;
 use Roomies\Phonable\Verification\VerificationResult;
 
@@ -60,6 +61,48 @@ class TwilioTest extends TestCase
         $this->assertEquals('abc-123', $result->id);
         $this->assertEquals($verifiable->getVerifiablePhoneNumber(), $result->phoneNumber);
         $this->assertEquals(VerificationRequestStatus::Failed, $result->status);
+    }
+
+    public function test_send_defaults_to_automatic_channel(): void
+    {
+        Http::fake([
+            'verify.twilio.com/v2/Services/service_sid/Verifications' => Http::response([
+                'sid' => 'abc-123',
+                'status' => 'pending',
+            ], 200),
+        ]);
+
+        $this->getTwilio()->send('+12125550000');
+
+        Http::assertSent(fn ($request) => $request['Channel'] === 'auto');
+    }
+
+    public function test_send_requests_text_channel(): void
+    {
+        Http::fake([
+            'verify.twilio.com/v2/Services/service_sid/Verifications' => Http::response([
+                'sid' => 'abc-123',
+                'status' => 'pending',
+            ], 200),
+        ]);
+
+        $this->getTwilio()->send('+12125550000', method: VerificationMethod::Text);
+
+        Http::assertSent(fn ($request) => $request['Channel'] === 'sms');
+    }
+
+    public function test_send_requests_voice_channel(): void
+    {
+        Http::fake([
+            'verify.twilio.com/v2/Services/service_sid/Verifications' => Http::response([
+                'sid' => 'abc-123',
+                'status' => 'pending',
+            ], 200),
+        ]);
+
+        $this->getTwilio()->send('+12125550000', method: VerificationMethod::Voice);
+
+        Http::assertSent(fn ($request) => $request['Channel'] === 'call');
     }
 
     public function test_verify_returns_for_valid_code(): void

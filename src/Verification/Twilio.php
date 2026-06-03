@@ -30,7 +30,7 @@ class Twilio implements VerifiesPhoneNumbers
     /**
      * Send the phone number verification code.
      */
-    public function send(string|PhoneVerifiable $verifiable): VerificationRequest
+    public function send(string|PhoneVerifiable $verifiable, VerificationMethod $method = VerificationMethod::Automatic): VerificationRequest
     {
         $phoneNumber = $this->getPhoneNumber($verifiable);
 
@@ -38,7 +38,7 @@ class Twilio implements VerifiesPhoneNumbers
             ->asForm()
             ->post('/Verifications', [
                 'To' => $phoneNumber,
-                'Channel' => 'sms',
+                'Channel' => $this->channel($method),
             ]);
 
         $status = match ($response->json('status')) {
@@ -76,6 +76,18 @@ class Twilio implements VerifiesPhoneNumbers
             'approved' => VerificationResult::Successful,
             'pending' => VerificationResult::Invalid,
             'canceled' => VerificationResult::Expired,
+        };
+    }
+
+    /**
+     * Map the verification method to the Twilio channel.
+     */
+    protected function channel(VerificationMethod $method): string
+    {
+        return match ($method) {
+            VerificationMethod::Voice => 'call',
+            VerificationMethod::Text => 'sms',
+            VerificationMethod::Automatic => 'auto',
         };
     }
 
