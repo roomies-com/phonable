@@ -6,7 +6,7 @@ use Mockery;
 use Roomies\Phonable\Identification\Vonage;
 use Roomies\Phonable\Tests\TestCase;
 use Vonage\Client;
-use Vonage\Client\Exception\Request as RequestException;
+use Vonage\Client\Exception\RequestException;
 use Vonage\Insights\Standard;
 use Vonage\Insights\StandardCnam;
 
