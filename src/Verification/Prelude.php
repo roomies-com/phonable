@@ -110,7 +110,7 @@ class Prelude implements VerifiesPhoneNumbers
      */
     protected function status($response): VerificationRequestStatus
     {
-        if (! in_array($response->json('status'), ['blocked', 'shadow_blocked'])) {
+        if (in_array($response->json('status'), ['success', 'retry'])) {
             return VerificationRequestStatus::Successful;
         }
 
