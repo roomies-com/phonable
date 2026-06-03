@@ -6,6 +6,7 @@ use PHPUnit\Framework\ExpectationFailedException;
 use Roomies\Phonable\Testing\VerificationFake;
 use Roomies\Phonable\Tests\TestCase;
 use Roomies\Phonable\Tests\Verification\Verifiable;
+use Roomies\Phonable\Verification\VerificationRequestStatus;
 use Roomies\Phonable\Verification\VerificationResult;
 
 class VerificationFakeTest extends TestCase
@@ -74,6 +75,26 @@ class VerificationFakeTest extends TestCase
         $request = $fake->send('+12125550000');
 
         $this->assertEquals('+12125550000', $request->phoneNumber);
+    }
+
+    public function test_send_returns_successful_status_by_default(): void
+    {
+        $fake = new VerificationFake;
+
+        $request = $fake->send('+12125550000');
+
+        $this->assertEquals(VerificationRequestStatus::Successful, $request->status);
+    }
+
+    public function test_send_can_be_faked_with_a_status(): void
+    {
+        $fake = new VerificationFake([
+            '+12125550000' => VerificationRequestStatus::Failed,
+        ]);
+
+        $request = $fake->send('+12125550000');
+
+        $this->assertEquals(VerificationRequestStatus::Failed, $request->status);
     }
 
     public function test_verify_accepts_a_string_phone_number(): void
