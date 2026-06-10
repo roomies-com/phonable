@@ -29,8 +29,10 @@ class Vonage implements VerifiesPhoneNumbers
 
     /**
      * Send the phone number verification code.
+     *
+     * @param  array<string, mixed>  $options
      */
-    public function send(string|PhoneVerifiable $verifiable, VerificationMethod $method = VerificationMethod::Automatic): VerificationRequest
+    public function send(string|PhoneVerifiable $verifiable, VerificationMethod $method = VerificationMethod::Automatic, array $options = []): VerificationRequest
     {
         $phoneNumber = $this->getPhoneNumber($verifiable);
 

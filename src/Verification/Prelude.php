@@ -30,26 +30,33 @@ class Prelude implements VerifiesPhoneNumbers
 
     /**
      * Send the phone number verification code.
+     *
+     * @param  array<string, mixed>  $options
      */
-    public function send(string|PhoneVerifiable $verifiable, VerificationMethod $method = VerificationMethod::Automatic): VerificationRequest
+    public function send(string|PhoneVerifiable $verifiable, VerificationMethod $method = VerificationMethod::Automatic, array $options = []): VerificationRequest
     {
         $phoneNumber = $this->getPhoneNumber($verifiable);
 
-        $response = $this->client
-            ->post('/verification', [
-                'target' => [
-                    'type' => 'phone_number',
-                    'value' => $phoneNumber,
-                ],
-                'signals' => [
-                    'ip' => $this->ipAddress,
-                    'user_agent' => $this->userAgent,
-                    'device_platform' => 'web',
-                ],
-                'options' => [
-                    'method' => $this->method($method),
-                ],
-            ]);
+        $payload = [
+            'target' => [
+                'type' => 'phone_number',
+                'value' => $phoneNumber,
+            ],
+            'signals' => [
+                'ip' => $this->ipAddress,
+                'user_agent' => $this->userAgent,
+                'device_platform' => 'web',
+            ],
+            'options' => [
+                'method' => $this->method($method),
+            ],
+        ];
+
+        if (! empty($options['dispatch_id'])) {
+            $payload['dispatch_id'] = $options['dispatch_id'];
+        }
+
+        $response = $this->client->post('/verification', $payload);
 
         return new VerificationRequest(
             id: $response->json('id'),
