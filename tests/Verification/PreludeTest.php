@@ -152,6 +152,20 @@ class PreludeTest extends TestCase
         });
     }
 
+    public function test_send_includes_dispatch_id_when_provided(): void
+    {
+        Http::fake([
+            'api.prelude.dev/v2/verification' => Http::response([
+                'id' => 'abc-123',
+                'status' => 'success',
+            ], 200),
+        ]);
+
+        app(Prelude::class)->send('+12125550000', options: ['dispatch_id' => 'dispatch-xyz']);
+
+        Http::assertSent(fn ($request) => $request['dispatch_id'] === 'dispatch-xyz');
+    }
+
     public function test_verify_returns_for_valid_code(): void
     {
         Http::fake([
