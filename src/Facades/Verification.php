@@ -4,10 +4,17 @@ namespace Roomies\Phonable\Facades;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Facade;
+use Roomies\Phonable\Contracts\PhoneVerifiable;
 use Roomies\Phonable\Testing\VerificationFake;
 use Roomies\Phonable\Verification\Manager;
+use Roomies\Phonable\Verification\VerificationMethod;
+use Roomies\Phonable\Verification\VerificationRequest;
+use Roomies\Phonable\Verification\VerificationResult;
 
 /**
+ * @method static VerificationRequest send(string|PhoneVerifiable $verifiable, VerificationMethod $method = VerificationMethod::Automatic, array $options = [])
+ * @method static VerificationResult verify(string|PhoneVerifiable $verifiable, string $code)
+ *
  * @see Manager
  */
 class Verification extends Facade
